@@ -1,17 +1,18 @@
 package com.demonorium.webinterface;
 
+import com.demonorium.database.Book;
 import com.demonorium.database.BookStorage;
 import com.demonorium.utils.SessionController;
 import com.demonorium.utils.UserSession;
+import com.demonorium.webinterface.forms.EditForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
+import java.lang.reflect.Parameter;
 
 @Controller
 public class ModifyController {
@@ -21,16 +22,43 @@ public class ModifyController {
     @Autowired
     protected BookStorage books;
 
-    @GetMapping("/books/edit")
-    String exit(@RequestParam boolean isNew, HttpServletRequest request, Model model) throws InterruptedException {
+    @GetMapping("/books/edit/{id}")
+    String edit(@PathVariable Long id, HttpServletRequest request, Model model) throws InterruptedException {
         UserSession session = sessionController.getSession(request);
-        if (session == null)
+        if ((session == null) || (id == null))
             return "redirect:/";
-        if (isNew) {
 
+        EditForm form = null;
+        if (id < 0) {
+            form = new EditForm();
+        } else {
+            Book book = books.get(id);
+            if (book == null) {
+                form = new EditForm();
+            } else
+                form = new EditForm(book);
         }
+        model.addAttribute("editForm", form);
+        return "edit";
+    }
 
-        return "";
+    @PostMapping("/books/edit")
+    String edit(@ModelAttribute("editForm") EditForm editForm, HttpServletRequest request, Model model) throws InterruptedException {
+        UserSession session = sessionController.getSession(request);
+        if ((session == null) || (editForm == null))
+            return "redirect:/";
+
+        if (editForm.getId() == null)
+            books.add(new Book(editForm.getName(), editForm.getAuthor(), editForm.getYear()));
+        else {
+            Book book = books.get(editForm.getId());
+            if (book != null) {
+                book.setAuthor(editForm.getAuthor());
+                book.setName(editForm.getName());
+                book.setYear(editForm.getYear());
+            }
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/remove/{id}")
