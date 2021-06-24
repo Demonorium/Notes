@@ -1,7 +1,6 @@
 package com.demonorium.utils;
 
 import com.demonorium.database.User;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,5 +54,9 @@ public class SessionController {
 
     public UserSession createSession(HttpServletRequest request, User user) throws InterruptedException {
         return createSession(getSessionID(request), user);
+    }
+
+    public void closeSession(HttpServletRequest request) throws InterruptedException {
+        closeSession(getSessionID(request));
     }
 }

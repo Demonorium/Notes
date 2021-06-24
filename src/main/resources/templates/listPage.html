@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 <html lang="en">
 <head>
@@ -11,7 +11,46 @@
 <body>
 <div class="root-container">
     <div>
+        <table>
+            <tr>
+                <td><h1>Книги</h1></td>
+                <td><h2 th:text="'Пользователь: '+${root.user.email}"></h2></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="scroll">
+                    <table>
+                        <tr>
+                            <td>Автор</td>
+                            <td>Название</td>
+                            <td>Год</td>
+                        </tr>
 
+                        <tr class = "book" th:each="book: ${root.books}">
+                            <td th:text="${book.author}"></td>
+                            <td th:text="${book.name}"></td>
+                            <td th:text="${book.year}"></td>
+                            <td><a th:href="'/remove/' + ${book.id}">Удалить</a></td>
+                        </tr>
+                    </table>
+                    </div>
+                </td>
+                <td >
+
+                    <p>
+                    <form action="#" th:action="@{/books/edit?new=true}" th:object="${root}" method="get">
+                        <input type="submit" value="Добавить книгу"/>
+                    </form>
+                    </p>
+
+                    <p>
+                    <form action="#" th:action="@{/exit}" th:object="${root}" method="get">
+                        <input type="submit" value="Выйти из аккаунта"/>
+                    </form>
+                    </p>
+                </td>
+            </tr>
+        </table>
     </div>
 
 </div>

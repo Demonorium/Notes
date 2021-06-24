@@ -5,6 +5,6 @@ import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//@ComponentScan(basePackages = "database")
+@ComponentScan(basePackages = "com.demonorium.database")
 public class DatabaseConfig {
 }

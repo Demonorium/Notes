@@ -4,11 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-//@Entity
 public class User {
-
-
-//    @Id
     private String email;
     private String password;
 
