@@ -7,7 +7,7 @@ import org.springframework.context.annotation.*;
 @ComponentScan(basePackages = "com.demonorium.utils")
 @Import({DatabaseConfig.class, WebConfig.class})
 public class MainConfig {
-    SessionController sessionController() {
-        return new SessionController();
-    }
+    //SessionController sessionController() {
+//        return new SessionController();
+//    }
 }
