@@ -1,76 +1,32 @@
-body {
-    background-color: black;
-    background: black;
-    color: white;
+.my-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1060;
+    transform: translate(-50%,-50%);
+}
+
+.back-color-main {
+    background-color: #f1f8ff;
+}
+.back-color-md {
+    background-color: #e6eefc;
+}
+.back-color-front {
+    background-color: #dde1e7;
+}
+.font-red {
+    color: #ff3131;
+}
+
+.text-center {
     text-align: center;
+    align-content: center;
 }
 
-@media screen and (min-width: 900px){
-    .root-container {
-        max-width: 70vw;
-        min-width: 70vw;
-    }
-}
-@media screen and (max-width: 899px){
-    .root-container {
-        width: 100%;
-    }
+.p-2 {
+    padding: 1em;
 }
 
-.root-container {
-    display: inline-block;
-}
 
-.table-container {
-    height: 90vh;
-    align: center;
-    display: table;
-}
 
-.cell-container {
-    vertical-align: middle;
-    display: table-cell;
-    text-align: left;
-}
-.form-container {
-    border: 1px solid white;
-    display: inline-block;
-    text-align: center;
-}
-.input {
-    color:white;
-    background-color:black;
-    border: 1px solid white;
-}
-.input::grammar-error {
-    color: red;
-    background-color: black;
-    text-decoration: none;
-}
-.input::spelling-error {
-    color: red;
-    background-color: black;
-    text-decoration: none;
-}
-
-input::-moz-selection {
-  color: white;
-  background-color: gray;
-  text-decoration: none;
-}
-
-input::selection {
-    color: white;
-    background-color: gray;
-    text-decoration: none;
-}
-
-input[type=submit] {
-    padding:5px 15px;
-    background:black;
-    color: white;
-    border: white;
-    border:1px solid;
-    border-color: white;
-    cursor:pointer;
-}

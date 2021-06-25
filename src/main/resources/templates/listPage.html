@@ -3,55 +3,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!--    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>-->
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 
-    <title>Регистрания/Вход</title>
+    <title>Список книг</title>
 </head>
-<body>
-<div class="root-container">
-    <div>
-        <table>
-            <tr>
-                <td><h1>Книги</h1></td>
-                <td><h2 th:text="'Пользователь: '+${root.user.email}"></h2></td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="scroll">
-                    <table>
-                        <tr>
-                            <td>Автор</td>
-                            <td>Название</td>
-                            <td>Год</td>
-                        </tr>
+<body class="back-color-main">
+<div class="container">
 
-                        <tr class = "book" th:each="book: ${root.books}">
-                            <td th:text="${book.author}"></td>
-                            <td th:text="${book.name}"></td>
-                            <td th:text="${book.year}"></td>
-                            <td><a th:href="'/remove/' + ${book.id}">Удалить</a></td>
-                        </tr>
-                    </table>
-                    </div>
-                </td>
-                <td >
-
-                    <p>
-                    <form action = "#" th:action="@{/books/edit/-1}" th:object="${root}" method="get">
-                        <input type="submit" value="Добавить книгу"/>
-                    </form>
-                    </p>
-
-                    <p>
-                    <form action="#" th:action="@{/exit}" th:object="${root}" method="get">
-                        <input type="submit" value="Выйти из аккаунта"/>
-                    </form>
-                    </p>
-                </td>
-            </tr>
-        </table>
+<div class ="back-color-md">
+    <div class = "span9">
+        <h2>Книги</h2>
     </div>
+    <div class = "span3">
+        <h4 th:text="'Пользователь: '+${root.user.email}"></h4>
+    </div>
+</div>
+
+<div class="span9 back-color-md">
+    <table class = "table table-bordered table-hover">
+        <tr>
+            <td>Автор</td>
+            <td>Название</td>
+            <td>Год</td>
+            <td></td>
+        </tr>
+
+        <tr class = "book" th:each="book: ${root.books}">
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.year}"></td>
+            <td class="text-center"><a class = "btn font-red text-center" th:href="'/remove/' + ${book.id}">Удалить</a></td>
+        </tr>
+    </table>
+</div>
+<div class="span3 border back-color-md text-center">
+    <p>
+        <form action = "#" th:action="@{/books/edit/-1}" th:object="${root}" method="get">
+            <input type="submit" value="Добавить книгу"/>
+        </form>
+    </p>
+
+    <p>
+        <form action="#" th:action="@{/exit}" th:object="${root}" method="get">
+            <input type="submit" value="Выйти из аккаунта"/>
+        </form>
+    </p>
+</div>
 
 </div>
 </body>
