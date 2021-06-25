@@ -3,41 +3,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<!--    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 
-    <title>Регистрания/Вход</title>
+    <title>Редактирование книги</title>
 </head>
-<body>
-    <div class="root-container">
-        <div class="table-container">
-            <div class="cell-container">
-                <div class="form-container">
-                    <form action="#" th:action="@{/books/edit}" th:object="${editForm}" method="post">
-                        <p>Редактирование книги</p>
-                        <p>
-                            <table>
-                                <tr>
-                                    <td>Название:</td>
-                                    <td><input type="text" th:field="${editForm.name}"/></td>
-                                </tr>
-                                <tr>
-                                    <td>Автор:</td>
-                                    <td><input type="text" th:field="${editForm.author}"/></td>
-                                </tr>
-                                <tr>
-                                    <td>Год:</td>
-                                    <td><input type="text" th:field="${editForm.year}"/></td>
-                                </tr>
-                            </table>
-                        </p>
-                        <p class ="form-buttons">
-                            <input type="submit" value="Подтвердить"/>
-                        </p>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<body class="back-color-main">
+<div class="align-content-center my-modal border p-2 back-color-md">
+    <form action="#" th:action="@{/books/edit}" th:object="${editForm}" method="post">
+        <p class="text-center">Редактирование книги</p>
+        <p>
+        <table>
+            <tr>
+                <td>Название:</td>
+                <td><input сlass="back-color-front" type="text" th:field="${editForm.name}"/></td>
+            </tr>
+            <tr>
+                <td>Автор:</td>
+                <td><input сlass="back-color-front" type="text" th:field="${editForm.author}"/></td>
+            </tr>
+            <tr>
+                <td>Год:</td>
+                <td><input сlass="back-color-front" type="text" th:field="${editForm.year}"/></td>
+            </tr>
+        </table>
+        </p>
+        <p class ="text-center">
+            <input сlass="back-color-front" type="submit" value="Подтвердить"/>
+        </p>
+    </form>
+</div>
 </body>
+
+
+
+
 </html>
