@@ -39,18 +39,22 @@
                 </tr>
             </table>
         </div>
-        <div class="span3 border back-color-md text-center">
+        <div class="span3 border text-center">
             <p>
-                <form action = "#" th:action="@{/books/edit/-1}" th:object="${root}" method="get">
-                    <input type="submit" value="Добавить книгу"/>
-                </form>
+                <a th:href="@{/books/edit/-1}" class = "btn-large btn-block back-color-front">Добавить книгу</a>
             </p>
+            <p>
+                <a th:href="@{/exit}" class = "btn-large btn-block back-color-front font-red">Выйти из аккаунта</a>
+            </p>
+<!--            <form action = "#" th:action="@{/books/edit/-1}" th:object="${root}" method="get">-->
+<!--                <input class = "btn-large btn-block back-color-front" type="submit" value="Добавить книгу"/>-->
+<!--            </form>-->
 
-            <p>
-                <form action="#" th:action="@{/exit}" th:object="${root}" method="get">
-                    <input type="submit" value="Выйти из аккаунта"/>
-                </form>
-            </p>
+
+
+<!--            <form action="#" th:action="@{/exit}" th:object="${root}" method="get">-->
+<!--                <input class = "btn-large btn-block  back-color-front" type="submit" value="Выйти из аккаунта"/>-->
+<!--            </form>-->
         </div>
     </div>
 </div>

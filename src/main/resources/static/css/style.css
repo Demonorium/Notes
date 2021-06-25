@@ -7,23 +7,34 @@
 }
 
 .back-color-main {
-    background-color: #f1f8ff;
+    background-color: #f1f8ff!important;
 }
 .back-color-md {
-    background-color: #e6eefc;
+    background-color: #e6eefc!important;
 }
 .back-color-front {
-    background-color: #dde1e7;
+    background-color: #dde1e7!important;
 }
 .font-red {
-    color: #ff3131;
+    color: #ff3131!important;
 }
 
 .text-center {
     text-align: center;
     align-content: center;
 }
-
+.btn-block{
+    color: dodgerblue;
+    display: block;
+    width: 100%;
+    padding-right:0;
+    padding-left:0;
+    border: 0!important;
+}
+.btn-block:hover{
+    text-decoration: none;
+    color: dodgerblue;
+}
 .p-2 {
     padding: 1em;
 }
