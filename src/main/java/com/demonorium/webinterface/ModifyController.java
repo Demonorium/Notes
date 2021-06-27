@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 @Controller
 public class ModifyController {
     @Autowired
@@ -31,7 +30,7 @@ public class ModifyController {
         if (id < 0) {
             form = new EditForm();
         } else {
-            Book book = books.get(id);
+            Book book = books.getBookById(id);
             if (book == null) {
                 form = new EditForm();
             } else
@@ -48,9 +47,9 @@ public class ModifyController {
             return "redirect:/";
 
         if (editForm.getId() == null)
-            books.add(new Book(editForm.getName(), editForm.getAuthor(), editForm.getYear()));
+            books.save(new Book(editForm.getName(), editForm.getAuthor(), editForm.getYear(), session.getUser()));
         else {
-            Book book = books.get(editForm.getId());
+            Book book = books.getBookById(editForm.getId());
             if (book != null) {
                 book.setAuthor(editForm.getAuthor());
                 book.setName(editForm.getName());
@@ -66,7 +65,7 @@ public class ModifyController {
         if ((session == null) || (id == null))
             return "redirect:/";
 
-        books.remove(id);
+        books.delete(books.getBookById(id));
         return "redirect:/";
     }
 }

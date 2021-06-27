@@ -30,7 +30,7 @@ public class IndexController {
     String getRequest(HttpServletRequest request, Model model) throws InterruptedException {
         UserSession session = sessionController.getSession(request);
         if (session != null) {
-            model.addAttribute("root", new Root(books.getAll(), session.getUser()));
+            model.addAttribute("root", new Root(books.getAllByUser(session.getUser()), session.getUser()));
             return "listPage";
         } else {
             model.addAttribute("registerForm", new RegisterForm());

@@ -1,19 +1,27 @@
 package com.demonorium.database;
 
+import javax.persistence.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Entity
 public class Book {
     private static final AtomicLong globalId = new AtomicLong();
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private final long id;
     private String name;
     private String author;
     private String year;
+    @ManyToOne
+    private User user;
 
     public Book() {
         id = globalId.incrementAndGet();
+        user = null;
     }
-    public Book(String name, String author, String year) {
+    public Book(String name, String author, String year, User user) {
+        this.user = user;
         this.id = globalId.incrementAndGet();
         this.name = name;
         this.author = author;
