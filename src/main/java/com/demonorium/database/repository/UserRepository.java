@@ -1,7 +1,8 @@
-package com.demonorium.database;
+package com.demonorium.database.repository;
 
+import com.demonorium.database.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, String> {
-    User getByEmail(String email);
+    User getByUsername(String username);
 }

@@ -1,11 +1,12 @@
 package com.demonorium.webinterface;
 
 
-import com.demonorium.database.User;
-import com.demonorium.database.UserRepository;
-import com.demonorium.utils.SessionController;
-import com.demonorium.webinterface.forms.RegisterForm;
+import com.demonorium.database.entity.User;
+import com.demonorium.database.repository.UserRepository;
+import com.demonorium.security.AppUserDetailsService;
+import com.demonorium.webinterface.view.RegisterView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,41 +14,31 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class RegistrationController {
-
     @Autowired
-    public SessionController sessionController;
+    public AppUserDetailsService users;
 
-    @Autowired
-    public UserRepository repository;
-
-    @GetMapping("/exit")
-    String exit(HttpServletRequest request, Model model) throws InterruptedException {
-        sessionController.closeSession(request);
-        return "redirect:/";
-    }
-    @PostMapping("/registration")
-    String registerRequest(@ModelAttribute("registerForm") RegisterForm registerForm, HttpServletRequest request, Model model) throws InterruptedException {
-        User user = repository.getByEmail(registerForm.getEmail());
-
-        if (user == null) {
-            user = new User(registerForm.getEmail(), registerForm.getPassword());
-            repository.save(user);
-        } else if (!user.getPassword().equals(registerForm.getPassword())){
-            user = null;
-        }
-
-        if (user != null) {
-            sessionController.createSession(request, user);
-            return "redirect:/";
-        }
-
-        registerForm.setEmail("");
-        registerForm.resetPassword();
+    @GetMapping("/registration")
+    String registerRequest(Model model) {
+        model.addAttribute("form", new RegisterView());
         return "registration";
+    }
+
+    @PostMapping("/registration")
+    String registerRequest(@ModelAttribute("form") RegisterView form,  Model model) {
+        final String returnTarget = model.containsAttribute("isHomeFlag")? "home-promo" : "registration";
+
+        if (!form.getPassword().equals(form.getPasswordConf())) {
+            model.addAttribute("eConf", true);
+            return returnTarget;
+        }
+        if (!users.newUser(form.getUsername(), form.getEmail(), form.getPassword())){
+            model.addAttribute("eName", true);
+            return returnTarget;
+        }
+
+        return "redirect:/login";
     }
 }

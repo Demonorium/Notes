@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-responsive.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script type="text/javascript" th:href="@{/js/bootstrap.js}">
+    </script>
+    <title>Список книг</title>
+</head>
+
+
+<body class="back-color-main">
+<div class="row-fluid">
+    <div class="span2 back-color-md p-2">
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        <h3 class="text-color-light" th:text="${user.username}"></h3>
+                        <p><a class="text-color-light" th:href="@{/profile}">Настройки отображения</a></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <hr/>
+        <p><a th:href="@{/profile}">Профиль</a></p>
+        <p><a th:href="@{/settings}">Настройки</a></p>
+        <p><a th:href="@{/colors}">Цветовая схема</a></p>
+        <hr/>
+        <p>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Выход" class="font-red"/>
+            </form>
+        <hr/>
+        <p><a th:href="@{/about}">О сайте</a></p>
+    </div>
+    <div class="span4 border">
+        <p></p>
+        <form>
+            <input type="text" placeholder="Поиск" name="search" class="form-search btn-block text-color-light back-color-md"/>
+            <div class ="row-fluid">
+                <div class="span5">
+                    <label>
+                        <input type="radio" name="search_groups"/>
+                        По группам
+                    </label>
+                </div>
+                <div class="span5">
+                    <label>
+                        <input type="radio" name="search_notes"/>
+                        По заметкам
+                    </label>
+                </div>
+
+                <div class="span2">
+                    <input type="submit" content="Найти"/>
+                </div>
+            </div>
+        </form>
+        <hr/>
+        <div class ="row-fluid">
+            <div class="span2 border">
+                <div class ="border" th:each="group: ${groups}">
+                    <div class="back-color-md" th:if="${group.id}==${selectedGroup}">
+                        <p th:text="${group.name}"></p>
+                    </div>
+                    <div th:if="${group.id}!=${selectedGroup}">
+                        <p th:text="${group.name}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="span2 border">
+
+            </div>
+        </div>
+    </div>
+    <div class="span5">
+        <div class="back-color-md border">
+            <h1 class="text-color-light">Notes</h1>
+            <p  class="text-color-light">© Круглов Игорь 2021</p>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

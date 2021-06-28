@@ -6,6 +6,8 @@
     transform: translate(-50%,-50%);
 }
 
+
+
 .back-color-main {
     background-color: #f1f8ff!important;
 }
@@ -39,5 +41,18 @@
     padding: 1em;
 }
 
+.error {
+    color: #ff3131!important;
+}
 
+.text-color-light {
+    color: #4bdcde;
+}
 
+.my-modal-relative {
+    float: inside;
+
+}
+.border {
+    border-color: #4bdcde;
+}

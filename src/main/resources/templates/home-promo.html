@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-responsive.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script type="text/javascript" th:href="@{/js/bootstrap.js}">
+    </script>
+    <title>Список книг</title>
+</head>
+
+
+<body class="back-color-main">
+<div class="offset2 span5">
+    <div class="align-content-center my-modal-relative border p-2 back-color-md">
+        <form action="#" th:action="@{/registration}" th:object="${form}" method="post">
+            <h2 class="text-center">Регистрация</h2>
+            <p>
+            <table>
+                <tr>
+                    <td>Имя пользователя:</td>
+                    <td><input сlass="back-color-front" type="text" required="required" th:field="${form.username}"/></td>
+                </tr>
+                <tr th:if="${eName}">
+                    <td></td>
+                    <td class="error">Пользователь с таким именем уже существует</td>
+                </tr>
+                <tr>
+                    <td>Почта:</td>
+                    <td><input сlass="back-color-front" required="required" type="email" th:field="${form.email}"/></td>
+                </tr>
+                <tr>
+                    <td>Пароль:</td>
+                    <td><input сlass="back-color-front" required="required" type="password" th:field="${form.password}"/></td>
+                </tr>
+                <tr>
+                    <td>Подтвердите пароль:</td>
+                    <td><input сlass="back-color-front" required="required" type="password" th:field="${form.passwordConf}"/></td>
+                </tr>
+                <tr th:if="${eConf}">
+                    <td></td>
+                    <td class="error">Пароли не совпадают</td>
+                </tr>
+            </table>
+            </p>
+            <p class="text-center">
+                <input class ="back-color-front" type="submit" value="Зарегистрироваться"/>
+            </p>
+
+            <p>Уже есть аккаунт? <a th:href="@{/login}">Войти.</a></p>
+        </form>
+    </div>
+</div>
+<div class="offset2 span3">
+    <h1 class="text-color-light">Сервис Notes</h1>
+    <p>Простой сервис для составления простых заметок.</p>
+    <p>Зарегистрируйтесь, чтобы начать им пользоваться уже сейчас!</p>
+</div>
+
+</body>
+</html>

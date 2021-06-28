@@ -1,7 +1,6 @@
 package com.demonorium;
 
-import com.demonorium.database.Book;
-import com.demonorium.database.BookStorage;
+import com.demonorium.config.MainConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;

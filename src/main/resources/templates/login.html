@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+    <title>Вход в аккаунт</title>
+</head>
+<body class="back-color-main">
+<div class="align-content-center my-modal border p-2 back-color-md">
+    <form action="#" th:action="@{/login}" method="post">
+        <h2 class="text-center">Вход</h2>
+        <p></p>
+        <table>
+            <tr class="error" th:if="${param.error}">
+                Неверный логин или пароль.
+            </tr>
+            <tr>
+                <td>Имя пользователя:</td>
+                <td><input сlass="back-color-front" type="text" required="required" name="username"/></td>
+            </tr>
+            <tr>
+                <td>Пароль:</td>
+                <td><input сlass="back-color-front" type="password" required="required" name="password"/></td>
+            </tr>
+        </table>
+        <p></p>
+        <p class="text-center">
+            <input class = "back-color-front" type="submit" value="Войти"/>
+        </p>
+
+        <p></p>
+        <p>Нет аккаунта? <a th:href="@{/registration}">Регистрация.</a></p>
+    </form>
+</div>
+</body>
+</html>

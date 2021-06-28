@@ -1,4 +1,4 @@
-package com.demonorium;
+package com.demonorium.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
