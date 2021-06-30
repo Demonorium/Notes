@@ -10,7 +10,7 @@
     <title>Вход в аккаунт</title>
 </head>
 <body class="back-color-main">
-<div class="align-content-center my-modal border p-2 back-color-md">
+<div class="align-content-center my-modal p-3 back-color-md">
     <form action="#" th:action="@{/login}" method="post">
         <h2 class="text-center">Вход</h2>
         <p></p>
@@ -20,16 +20,16 @@
             </tr>
             <tr>
                 <td>Имя пользователя:</td>
-                <td><input сlass="back-color-front" type="text" required="required" name="username"/></td>
+                <td><input сlass="back-color-front" type="text" placeholder="Username" required="required" name="username"/></td>
             </tr>
             <tr>
                 <td>Пароль:</td>
-                <td><input сlass="back-color-front" type="password" required="required" name="password"/></td>
+                <td><input сlass="back-color-front" type="password" placeholder="Пароль" required="required" name="password"/></td>
             </tr>
         </table>
         <p></p>
         <p class="text-center">
-            <input class = "back-color-front" type="submit" value="Войти"/>
+            <input class = "btn back-color-front" type="submit" value="Войти"/>
         </p>
 
         <p></p>

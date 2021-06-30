@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Entity
-@Table(name = "noteGroups")
+@Table(name = "TABLE_GROUPS")
 public class Group {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Group {
     private User user;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Note> notes = new HashSet<>(32);
 
     protected Group() {}

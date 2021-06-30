@@ -6,8 +6,6 @@
     transform: translate(-50%,-50%);
 }
 
-
-
 .back-color-main {
     background-color: #f1f8ff!important;
 }
@@ -25,34 +23,48 @@
     text-align: center;
     align-content: center;
 }
-.btn-block{
-    color: dodgerblue;
-    display: block;
-    width: 100%;
-    padding-right:0;
-    padding-left:0;
-    border: 0!important;
-}
-.btn-block:hover{
-    text-decoration: none;
-    color: dodgerblue;
-}
-.p-2 {
-    padding: 1em;
-}
+
+/*.btn-block{*/
+/*    color: dodgerblue;*/
+/*    display: block;*/
+/*    width: 100%;*/
+/*    padding-right:0;*/
+/*    padding-left:0;*/
+/*    border: 0!important;*/
+/*}*/
+/*.btn-block:hover{*/
+/*    text-decoration: none;*/
+/*    color: dodgerblue;*/
+/*}*/
+/*.p-2 {*/
+/*    padding: 1em;*/
+/*}*/
 
 .error {
     color: #ff3131!important;
 }
 
+.text-color-ref {
+    color: #3762c4;
+}
+
 .text-color-light {
-    color: #4bdcde;
+    color: #00acac;
 }
 
 .my-modal-relative {
     float: inside;
 
 }
+hr {
+    border-color:#00acac;
+    color:#00acac;
+    background-color: #00acac;
+}
 .border {
-    border-color: #4bdcde;
+    border: 1px solid #b7ffff !important;
+}
+
+.mark-block {
+    height: 3.0rem;
 }

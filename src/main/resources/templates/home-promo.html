@@ -14,7 +14,7 @@
 
 <body class="back-color-main">
 <div class="offset2 span5">
-    <div class="align-content-center my-modal-relative border p-2 back-color-md">
+    <div class="align-content-center my-modal-relative p-3 back-color-md">
         <form action="#" th:action="@{/registration}" th:object="${form}" method="post">
             <h2 class="text-center">Регистрация</h2>
             <p>
@@ -46,7 +46,7 @@
             </table>
             </p>
             <p class="text-center">
-                <input class ="back-color-front" type="submit" value="Зарегистрироваться"/>
+                <input class ="btn back-color-front" type="submit" value="Зарегистрироваться"/>
             </p>
 
             <p>Уже есть аккаунт? <a th:href="@{/login}">Войти.</a></p>

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
+@Table(name = "TABLE_NOTES")
 public class Note {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -12,10 +13,13 @@ public class Note {
     private String name;
     private String content;
 
+    private String description;
+
     private Date creationDate;
     private Date updateDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="groupId", nullable = false)
     private Group group;
 
 
@@ -27,6 +31,11 @@ public class Note {
         this.content = content;
         this.creationDate = new Date();
         this.updateDate = this.creationDate;
+        if (content.length() > 23)
+            description = content.substring(0, 20) + "...";
+        else
+            description = content;
+
         this.group = group;
     }
 
@@ -52,6 +61,10 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+        if (content.length() > 23)
+            description = content.substring(0, 20) + "...";
+        else
+            description = content;
     }
 
     public Date getCreationDate() {
@@ -68,6 +81,14 @@ public class Note {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Group getGroup() {

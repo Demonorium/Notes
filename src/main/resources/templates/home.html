@@ -8,72 +8,108 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <script type="text/javascript" th:href="@{/js/bootstrap.js}">
     </script>
-    <title>Список книг</title>
+    <title>Notes</title>
+
+    <style type="text/css">
+        #note_edit { resize: none; }
+    </style>
 </head>
 
 
 <body class="back-color-main">
 <div class="row-fluid">
-    <div class="span2 back-color-md p-2">
+    <div class="span2 back-color-md p-3">
         <div>
             <table>
                 <tr>
                     <td>
+                        <p class="text-color-light">Пользователь:</p>
                         <h3 class="text-color-light" th:text="${user.username}"></h3>
-                        <p><a class="text-color-light" th:href="@{/profile}">Настройки отображения</a></p>
                     </td>
                 </tr>
             </table>
         </div>
         <hr/>
-        <p><a th:href="@{/profile}">Профиль</a></p>
-        <p><a th:href="@{/settings}">Настройки</a></p>
-        <p><a th:href="@{/colors}">Цветовая схема</a></p>
+        <p></p>
+        <form th:action="@{/profile}" method="get">
+            <input type="submit" value="Профиль" class="btn back-color-md text-color-ref"/>
+        </form>
+        <p></p>
+        <form th:action="@{/settings}" method="get">
+            <input type="submit" value="Настройки" class="btn back-color-md text-color-ref"/>
+        </form>
+        <p></p>
+        <form th:action="@{/colors}" method="get">
+            <input type="submit" value="Цветовая схема" class="btn back-color-md text-color-ref"/>
+        </form>
         <hr/>
-        <p>
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Выход" class="font-red"/>
-            </form>
+        <p></p>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выход" class="btn back-color-md font-red"/>
+        </form>
+
         <hr/>
-        <p><a th:href="@{/about}">О сайте</a></p>
+        <form th:action="@{/about}" method="get">
+            <input type="submit" value="О сайте" class="btn back-color-md text-color-ref"/>
+        </form>
     </div>
     <div class="span4 border">
         <p></p>
         <form>
-            <input type="text" placeholder="Поиск" name="search" class="form-search btn-block text-color-light back-color-md"/>
-            <div class ="row-fluid">
-                <div class="span5">
-                    <label>
-                        <input type="radio" name="search_groups"/>
-                        По группам
-                    </label>
-                </div>
-                <div class="span5">
-                    <label>
-                        <input type="radio" name="search_notes"/>
-                        По заметкам
-                    </label>
+            <fieldset>
+                <div class ="row-fluid">
+                    <div class="span8">
+                        <input type="text" placeholder="Поиск" name="search" class="row-fluid search-query text-color-light back-color-md"
+                        style="border:0"/>
+                    </div>
+                    <div class="span3">
+                        <input type="submit" class="btn back-color-md" value="Найти"/>
+                    </div>
                 </div>
 
-                <div class="span2">
-                    <input type="submit" content="Найти"/>
+                <div class ="row-fluid">
+                    <div class="span6">
+                        <label class="check-box">
+                            <input type="checkbox" name="search_groups"/> По группам
+                        </label>
+                    </div>
+                    <div class="span6">
+                        <label class="check-box">
+                            <input type="checkbox" name="search_notes"/> По заметкам
+                        </label>
+                    </div>
                 </div>
-            </div>
+            </fieldset>
         </form>
         <hr/>
         <div class ="row-fluid">
-            <div class="span2 border">
-                <div class ="border" th:each="group: ${groups}">
-                    <div class="back-color-md" th:if="${group.id}==${selectedGroup}">
-                        <p th:text="${group.name}"></p>
+            <div class="span5">
+                <div th:each="group: ${groups}">
+                    <div class = "mark-block back-color-md">
+                        <div class="back-color-md flex-fill" th:if="${group.id eq selectedGroup}">
+                            <p class="p-0 m-0" th:text="${group.name}"></p>
+                        </div>
+                        <div class = "flex-fill" th:unless="${group.id} eq ${selectedGroup}">
+                            <p class="p-0 m-0" th:text="${group.name}"></p>
+                        </div>
                     </div>
-                    <div th:if="${group.id}!=${selectedGroup}">
-                        <p th:text="${group.name}"></p>
-                    </div>
+                    <hr/>
                 </div>
             </div>
-            <div class="span2 border">
-
+            <div class="span5">
+                <div class ="mark-block" th:each="note: ${notes}">
+                    <div class = "mark-block back-color-md p-0 m-0">
+                        <div class="flex-fill back-color-md" th:if="${noteIsSelected and (note.id eq selectedNote)}">
+                            <p class="p-0 m-0" th:text="${note.name}"></p>
+                            <p class="p-0 m-0" th:text="${note.description}"></p>
+                        </div>
+                        <div class = "flex-fill" th:unless="${noteIsSelected and (note.id eq selectedNote)}">
+                            <p class="p-0 m-0" th:text="${note.name}"></p>
+                            <p class="p-0 m-0" th:text="${note.description}"></p>
+                        </div>
+                    </div>
+                    <hr class="p-0 m-0"/>
+                </div>
             </div>
         </div>
     </div>
@@ -81,6 +117,16 @@
         <div class="back-color-md border">
             <h1 class="text-color-light">Notes</h1>
             <p  class="text-color-light">© Круглов Игорь 2021</p>
+        </div>
+        <div th:if="${noteIsSelected}">
+            <p></p>
+            <form th:action="@{/request/note}" th:object="${note}" method="post">
+                <input type="text" placeholder="Название заметки" th:field="${note.name}" class="input-medium search-query text-color-light back-color-md"/>
+                <p></p>
+                <textarea id="note_edit" placeholder="Заметка" th:field="${note.content}"></textarea>
+                <p></p>
+                <input type="submit" class="btn" content="Сохранить"/>
+            </form>
         </div>
     </div>
 </div>

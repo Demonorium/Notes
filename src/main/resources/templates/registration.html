@@ -9,14 +9,14 @@
     <title>Регистрания</title>
 </head>
 <body class="back-color-main">
-    <div class="align-content-center my-modal border p-2 back-color-md">
+    <div class="align-content-center my-modal p-3 back-color-md">
         <form action="#" th:action="@{/registration}" th:object="${form}" method="post">
             <h2 class="text-center">Регистрация</h2>
             <p>
                 <table>
                     <tr>
                         <td>Имя пользователя:</td>
-                        <td><input сlass="back-color-front" type="text" required="required" th:field="${form.username}"/></td>
+                        <td><input сlass="back-color-front" type="text" maxlength="20" placeholder="Username" required="required" th:field="${form.username}"/></td>
                     </tr>
                     <tr th:if="${eName}">
                         <td></td>
@@ -24,15 +24,15 @@
                     </tr>
                     <tr>
                         <td>Почта:</td>
-                        <td><input сlass="back-color-front" required="required" type="email" th:field="${form.email}"/></td>
+                        <td><input сlass="back-color-front" required="required" type="email" placeholder="Example@Mailbox" th:field="${form.email}"/></td>
                     </tr>
                     <tr>
                         <td>Пароль:</td>
-                        <td><input сlass="back-color-front" required="required" type="password" th:field="${form.password}"/></td>
+                        <td><input сlass="back-color-front" required="required" type="password" placeholder="Пароль" th:field="${form.password}"/></td>
                     </tr>
                     <tr>
                         <td>Подтвердите пароль:</td>
-                        <td><input сlass="back-color-front" required="required" type="password" th:field="${form.passwordConf}"/></td>
+                        <td><input сlass="back-color-front" required="required" type="password" placeholder="Пароль" th:field="${form.passwordConf}"/></td>
                     </tr>
                     <tr th:if="${eConf}">
                         <td></td>
@@ -41,7 +41,7 @@
                 </table>
             </p>
             <p class="text-center">
-                <input class ="back-color-front" type="submit" value="Зарегистрироваться"/>
+                <input class ="btn back-color-front" type="submit" value="Зарегистрироваться"/>
             </p>
 
             <p>Уже есть аккаунт? <a th:href="@{/login}">Войти.</a></p>

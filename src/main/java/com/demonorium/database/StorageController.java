@@ -1,5 +1,6 @@
 package com.demonorium.database;
 
+import com.demonorium.database.entity.User;
 import com.demonorium.database.repository.GroupRepository;
 import com.demonorium.database.repository.NoteRepository;
 import com.demonorium.database.repository.UserRepository;

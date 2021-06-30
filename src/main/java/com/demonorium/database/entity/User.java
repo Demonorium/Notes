@@ -5,17 +5,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 @Entity
+@Table(name = "TABLE_USERS")
 public class User {
     @Id
     private String username;
     private String email;
     private String password;
+
+
 
     protected User() {}
 

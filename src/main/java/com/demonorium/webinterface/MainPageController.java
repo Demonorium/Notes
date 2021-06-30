@@ -26,10 +26,11 @@ public class MainPageController {
         model.addAttribute("user", user);
         List<Group> groups = storage.group.getByUser(user);
         model.addAttribute("groups", groups);
-        model.addAttribute("selectedGroup", 0);
+        model.addAttribute("selectedGroup", groups.get(0).getId());
         Collection<Note> notes = groups.get(0).getNotes();
         model.addAttribute("notes", notes);
-
+        model.addAttribute("noteIsSelected", false);
+        model.addAttribute("selectedNote", -1);
         return "home";
     }
 }
