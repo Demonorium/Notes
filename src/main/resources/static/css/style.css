@@ -68,3 +68,20 @@ hr {
 .mark-block {
     height: 3.0rem;
 }
+
+
+.input-field-main {
+    width: 100%;
+    height: 60vh;
+    border: 0;
+    resize: none!important;
+}
+
+.input-field-name {
+    width: 80%;
+    height: 4vh;
+    border: 0;
+}
+.input-field-name:focus, .input-field-main:focus {
+    outline: none;
+}

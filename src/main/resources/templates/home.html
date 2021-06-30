@@ -10,9 +10,6 @@
     </script>
     <title>Notes</title>
 
-    <style type="text/css">
-        #note_edit { resize: none; }
-    </style>
 </head>
 
 
@@ -84,21 +81,26 @@
         <hr/>
         <div class ="row-fluid">
             <div class="span5">
-                <div th:each="group: ${groups}">
-                    <div class = "mark-block back-color-md">
+                <div class ="mark-block" th:each="group: ${groups}">
+                    <a class = "btn d-block mark-block back-color-md p-0 m-0" th:href="'/home/'+${group.id}">
                         <div class="back-color-md flex-fill" th:if="${group.id eq selectedGroup}">
                             <p class="p-0 m-0" th:text="${group.name}"></p>
                         </div>
                         <div class = "flex-fill" th:unless="${group.id} eq ${selectedGroup}">
                             <p class="p-0 m-0" th:text="${group.name}"></p>
                         </div>
-                    </div>
-                    <hr/>
+                    </a>
+                    <hr class="p-0 m-0"/>
+                </div>
+                <div class="mark-block text-center">
+                    <form th:action="@{/request/new_group}" method="post">
+                        <input type="submit" class="btn back-color-md" value="+"/>
+                    </form>
                 </div>
             </div>
             <div class="span5">
                 <div class ="mark-block" th:each="note: ${notes}">
-                    <div class = "mark-block back-color-md p-0 m-0">
+                    <a class = "btn d-block mark-block back-color-md p-0 m-0" th:href="'/home/'+${selectedGroup}+'/'+${note.id}">
                         <div class="flex-fill back-color-md" th:if="${noteIsSelected and (note.id eq selectedNote)}">
                             <p class="p-0 m-0" th:text="${note.name}"></p>
                             <p class="p-0 m-0" th:text="${note.description}"></p>
@@ -107,8 +109,13 @@
                             <p class="p-0 m-0" th:text="${note.name}"></p>
                             <p class="p-0 m-0" th:text="${note.description}"></p>
                         </div>
-                    </div>
+                    </a>
                     <hr class="p-0 m-0"/>
+                </div>
+                <div class="mark-block text-center" >
+                    <form th:action="'/request/new_note/'+${selectedGroup}" method="post">
+                        <input type="submit" class="btn back-color-md" value="+"/>
+                    </form>
                 </div>
             </div>
         </div>
@@ -120,12 +127,12 @@
         </div>
         <div th:if="${noteIsSelected}">
             <p></p>
-            <form th:action="@{/request/note}" th:object="${note}" method="post">
-                <input type="text" placeholder="Название заметки" th:field="${note.name}" class="input-medium search-query text-color-light back-color-md"/>
+            <form th:action="'/request/save/'+${selectedNote}" th:object="${note}" method="post">
+                <input type="text" placeholder="Название заметки" th:field="${note.name}" class="input-medium search-query text-color-light back-color-md input-field-name"/>
                 <p></p>
-                <textarea id="note_edit" placeholder="Заметка" th:field="${note.content}"></textarea>
+                <textarea class="back-color-md text-color-light input-field-main" placeholder="Заметка" th:field="${note.content}"></textarea>
                 <p></p>
-                <input type="submit" class="btn" content="Сохранить"/>
+                <input type="submit" class="btn back-color-md" value="Сохранить"/>
             </form>
         </div>
     </div>

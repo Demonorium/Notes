@@ -18,8 +18,8 @@ public class Note {
     private Date creationDate;
     private Date updateDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="groupId", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name="group_id", nullable = false)
     private Group group;
 
 

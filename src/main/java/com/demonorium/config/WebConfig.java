@@ -29,6 +29,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/home").setViewName("redirect:/home/-1/-1");
     }
 
     @Override
