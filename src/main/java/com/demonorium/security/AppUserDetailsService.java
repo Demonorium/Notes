@@ -40,6 +40,9 @@ public class AppUserDetailsService implements UserDetailsService {
             storage.user.save(user);
             Group group = new Group("default", user);
             storage.group.save(group);
+            Group avvv = new Group("Доступные мне", user);
+            storage.group.save(avvv);
+
             storage.note.save(new Note(
                     "Добро пожаловать",
                     "Это заметка, вы можете её редактировать. Нажмите на +, " +

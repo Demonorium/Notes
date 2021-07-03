@@ -3,11 +3,42 @@
 <head>
     <meta charset="UTF-8">
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-responsive.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <script type="text/javascript" th:href="@{/js/bootstrap.js}">
     </script>
+
+    <script>
+        path = window.location.host
+
+        function addGroupEdit() {
+            let lst = document.getElementById("list-groups")
+            let element = document.createElement("input")
+            element.setAttribute("type", "text")
+            element.setAttribute("id", "group-edit")
+
+            lst.appendChild(element)
+            element.addEventListener('focusout', function (event) {
+                if ((element.value == null) || (element.value === "")) {
+                    element.remove()
+                } else {
+                    axios.get("/request/new_group", {
+                        withCredentials: true,
+                        params: {
+                            "name": element.value
+                        }
+                    }).then(res => {
+                        location.reload()
+                    });
+                }
+            });
+            element.focus()
+        }
+
+    </script>
+
     <title>Notes</title>
 
 </head>
@@ -52,11 +83,11 @@
     </div>
     <div class="span4 border">
         <p></p>
-        <form>
+        <form method="get">
             <fieldset>
                 <div class ="row-fluid">
                     <div class="span8">
-                        <input type="text" placeholder="Поиск" name="search" class="row-fluid search-query text-color-light back-color-md"
+                        <input type="search" placeholder="Поиск" name="search" class="row-fluid search-query text-color-light back-color-md"
                         style="border:0"/>
                     </div>
                     <div class="span3">
@@ -81,27 +112,31 @@
         <hr/>
         <div class ="row-fluid">
             <div class="span5">
-                <div class ="mark-block" th:each="group: ${groups}">
-                    <a class = "btn d-block mark-block back-color-md p-0 m-0" th:href="'/home/'+${group.id}">
-                        <div class="back-color-md flex-fill" th:if="${group.id eq selectedGroup}">
-                            <p class="p-0 m-0" th:text="${group.name}"></p>
-                        </div>
-                        <div class = "flex-fill" th:unless="${group.id} eq ${selectedGroup}">
-                            <p class="p-0 m-0" th:text="${group.name}"></p>
-                        </div>
-                    </a>
-                    <hr class="p-0 m-0"/>
+                <div id = "list-groups">
+                    <div class ="mark-block" th:each="group: ${groups}">
+                        <a class = "btn d-block mark-block p-0 m-0" th:href="'/home/'+${group.id} + '/-1'">
+                            <div class="back-color-md fill-block" th:if="${group.id eq selectedGroup}">
+                                <p class="p-0 m-0" th:text="${group.name}"></p>
+                                <p class="p-0 m-0"></p>
+                            </div>
+                            <div class = "flex-fill" th:unless="${group.id} eq ${selectedGroup}">
+                                <p class="p-0 m-0" th:text="${group.name}"></p>
+                                <p class="p-0 m-0"></p>
+                            </div>
+                        </a>
+                        <hr class="p-0 m-0"/>
+                    </div>
                 </div>
                 <div class="mark-block text-center">
-                    <form th:action="@{/request/new_group}" method="post">
-                        <input type="submit" class="btn back-color-md" value="+"/>
-                    </form>
+                    <button class="btn back-color-md" onclick="addGroupEdit()">
+                        +
+                    </button>
                 </div>
             </div>
             <div class="span5">
                 <div class ="mark-block" th:each="note: ${notes}">
-                    <a class = "btn d-block mark-block back-color-md p-0 m-0" th:href="'/home/'+${selectedGroup}+'/'+${note.id}">
-                        <div class="flex-fill back-color-md" th:if="${noteIsSelected and (note.id eq selectedNote)}">
+                    <a class = "btn d-block mark-block p-0 m-0" th:href="'/home/'+${selectedGroup}+'/'+${note.id}">
+                        <div class="back-color-md fill-block" th:if="${noteIsSelected and (note.id eq selectedNote)}">
                             <p class="p-0 m-0" th:text="${note.name}"></p>
                             <p class="p-0 m-0" th:text="${note.description}"></p>
                         </div>
