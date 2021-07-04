@@ -70,11 +70,10 @@ public class ApiController {
         if (name != null) {
             Group group = new Group(name, user);
             storage.group.save(group);
-            return ResponseEntity.ok("ok");
+            return ResponseEntity.ok("/home/"+group.getId() + "/-1");
         }
 
 
-        return ResponseEntity.badRequest().body("error");
-       //return "redirect:/home";
+        return ResponseEntity.badRequest().body("/home");
     }
 }

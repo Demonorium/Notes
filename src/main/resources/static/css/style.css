@@ -23,7 +23,17 @@
     text-align: center;
     align-content: center;
 }
+.text-left {
+    text-align: left;
+}
 
+.btn-edit {
+    background: none rgba(0,0,0,0);
+    outline: none;
+    border: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+}
 .error {
     color: #ff3131!important;
 }
@@ -52,7 +62,10 @@ hr {
 .mark-block {
     height: 3.0rem;
 }
-
+.group-edit {
+    width: 100%;
+    outline-color: #00acac;
+}
 .fill-block {
     width: 100%;
     height: 100%;

@@ -9,8 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.*;
 
-public interface NoteRepository extends CrudRepository<Note, Long> {
+public interface NoteRepository extends JpaRepository<Note, Long> {
     Note getNoteById(Long id);
     List<Note> getAllByGroup(Group group);
-
 }

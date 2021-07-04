@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.Collections.sort;
 
 @Controller
 public class MainPageController {
@@ -45,9 +45,8 @@ public class MainPageController {
 
         User user = storage.user.getByUsername(principal.getName());
         model.addAttribute("user", user);
-        List<Group> groups = storage.group.getByUser(user);
+        List<Group> groups = storage.group.findByUserOrderByName(user);
         model.addAttribute("groups", groups);
-
 
         Group currentGroup = groups.get(0);
 
@@ -59,7 +58,8 @@ public class MainPageController {
         }
 
         model.addAttribute("selectedGroup", currentGroup.getId());
-        Collection<Note> notes = currentGroup.getNotes();
+        TreeSet<Note> notes = new TreeSet<>(Comparator.comparing(Note::getUpdateDate).reversed());
+        notes.addAll(currentGroup.getNotes());
         model.addAttribute("notes", notes);
 
         model.addAttribute("noteIsSelected", false);
