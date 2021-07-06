@@ -264,7 +264,7 @@
         <div class="btn-group fill-block">
             <button type="button" class="btn userblock back-color-no text-color-light">
                 <h3 class="d-inline" th:text="${user.username}"></h3>
-                <img th:src="'/img/'+${user.username}+'.png'" class="img-thumbnail"/>
+                <img th:src="@{'/uploads/'+${user.username}+'.png'}" class="img-thumbnail"/>
             </button>
 
             <button type="button" class="btn back-color-no dropdown-toggle dropdown-toggle-split"

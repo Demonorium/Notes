@@ -1,8 +1,11 @@
 package com.demonorium.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "TABLE_NOTES")
@@ -23,7 +26,6 @@ public class Note{
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name="group_id", nullable = false)
     private Group group;
-
 
 
     protected Note() {}

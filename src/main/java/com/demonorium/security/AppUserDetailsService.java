@@ -46,6 +46,7 @@ public class AppUserDetailsService implements UserDetailsService {
                     | GroupFlags.NO_RENAME.flag()
                     | GroupFlags.FIXED_LEVEL_ROOT.flag()
                     | GroupFlags.NO_ADD.flag());
+            available.setNetGroup(true);
 
             storage.group.save(available);
 
@@ -53,6 +54,25 @@ public class AppUserDetailsService implements UserDetailsService {
                     "Добро пожаловать",
                     "Это заметка, вы можете её редактировать. Нажмите на +, " +
                             "чтобы создать новую заметку или группу заметок.", group));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeUser(String password, String username) {
+        User user = storage.user.getByUsername(username);
+        if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            storage.user.delete(user);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changePassword(String password, String newPassword, String username) {
+        User user = storage.user.getByUsername(username);
+        if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            storage.user.save(user);
             return true;
         }
         return false;

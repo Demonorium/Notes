@@ -1,5 +1,6 @@
 package com.demonorium.webinterface;
 
+import com.demonorium.database.entity.Access;
 import com.demonorium.utils.GroupFlags;
 import com.demonorium.database.StorageController;
 import com.demonorium.database.entity.Group;
@@ -55,7 +56,6 @@ public class MainPageController {
                 groups.add(group);
             }
         }
-        searchGroups = null;
         LinkedList<List<Group>> superGroups = new LinkedList<>();
         superGroups.add(defFixed);
         superGroups.add(fixed);
@@ -74,12 +74,22 @@ public class MainPageController {
             }
         }
         model.addAttribute("noAdd", currentGroup.testFlag(GroupFlags.NO_ADD));
-
-
         model.addAttribute("selectedGroup", currentGroup.getId());
-        TreeSet<Note> notes = new TreeSet<>(Comparator.comparing(Note::getUpdateDate).reversed());
-        notes.addAll(currentGroup.getNotes());
-        model.addAttribute("notes", notes);
+
+        if (currentGroup.getNetGroup()) {
+            TreeSet<Note> notes = new TreeSet<>(Comparator.comparing(Note::getUpdateDate).reversed());
+            List<Access> accesses = storage.access.getByUser(user);
+            for (Access access: accesses) {
+                notes.add(access.getNote());
+            }
+            model.addAttribute("notes", notes);
+        } else {
+            TreeSet<Note> notes = new TreeSet<>(Comparator.comparing(Note::getUpdateDate).reversed());
+            notes.addAll(currentGroup.getNotes());
+            model.addAttribute("notes", notes);
+        }
+
+
 
         model.addAttribute("noteIsSelected", false);
         model.addAttribute("selectedNote", -1);
