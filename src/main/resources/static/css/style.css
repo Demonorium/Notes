@@ -1,9 +1,30 @@
-.my-modal {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1060;
-    transform: translate(-50%,-50%);
+body {
+    padding-top: 1rem;
+}
+hr {
+    border-color:#0dcaf0;
+    color:#0dcaf0;
+    background-color: #0dcaf0;
+}
+.root {
+    padding-left: 2rem;
+}
+
+.fill-row {
+    width: 100%;
+}
+.fill-col {
+    height: 100%;
+}
+.fill-block {
+    width: 100%;
+    height: 100%;
+}
+
+.vertical-center {
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
 }
 
 .back-color-main {
@@ -15,6 +36,37 @@
 .back-color-front {
     background-color: #dde1e7!important;
 }
+.back-color-no {
+    background: rgba(0, 0, 0, 0)!important;
+}
+
+.filler {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1050;
+    background-color: rgba(60,60,57,0.8);
+}
+.my-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1060;
+    transform: translate(-50%,-50%);
+}
+
+.group-block {
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+}
+
+.border {
+    border: 1px solid #0dcaf0 !important;
+}
+
+
 .font-red {
     color: #ff3131!important;
 }
@@ -26,18 +78,47 @@
 .text-left {
     text-align: left;
 }
-
+.text-right {
+    text-align: right;
+}
 .btn-edit {
     background: none rgba(0,0,0,0);
     outline: none;
     border: 0;
-    width: 0.5rem;
-    height: 0.5rem;
+    display: block;
+    margin:0;
+    padding: 0;
+}
+.btn-edit svg {
+    margin: 0;
+    width: 1em;
+    height: 1.0em;
+    float:right;
+}
+.btn-table-small {
+    padding:0;
+    width:10%;
+}
+.btn-table-big {
+    padding:0;
+    width:90%;
+}
+.btn-table {
+    padding:0;
+    width:80%;
+    height:100%;
+}
+.btn-table tr{
+    padding: 0;
 }
 .error {
     color: #ff3131!important;
 }
-
+.search-class{
+    outline-color: #0dcaf0;
+    padding: .375rem .75rem;
+    height: 2.3rem;
+}
 .text-color-ref {
     color: #3762c4;
 }
@@ -50,34 +131,26 @@
     float: inside;
 
 }
-hr {
-    border-color:#00acac;
-    color:#00acac;
-    background-color: #00acac;
-}
-.border {
-    border: 1px solid #b7ffff !important;
-}
 
 .mark-block {
     height: 3.0rem;
+    width: 100%;
 }
 .group-edit {
     width: 100%;
-    outline-color: #00acac;
-}
-.fill-block {
-    width: 100%;
-    height: 100%;
+    outline-color: #0dcaf0;
+    color:#0dcaf0;
 }
 
 .input-field-main {
     width: 100%;
-    height: 60vh;
+    height: 79vh;
     border: 0;
     resize: none!important;
 }
-
+.square {
+    padding-bottom: 100%;
+}
 .input-field-name {
     width: 80%;
     height: 4vh;
@@ -85,4 +158,15 @@ hr {
 }
 .input-field-name:focus, .input-field-main:focus {
     outline: none;
+}
+
+.userblock {
+    min-width: 15vw;
+    text-align: right;
+}
+
+.notes {
+    margin: 0 0 0.2rem 2rem;
+    border-left: 4px solid #0dcaf0;
+    padding: 0;
 }

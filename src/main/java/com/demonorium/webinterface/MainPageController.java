@@ -1,11 +1,11 @@
 package com.demonorium.webinterface;
 
+import com.demonorium.utils.GroupFlags;
 import com.demonorium.database.StorageController;
 import com.demonorium.database.entity.Group;
 import com.demonorium.database.entity.Note;
 import com.demonorium.database.entity.User;
 import com.demonorium.webinterface.view.NoteView;
-import com.demonorium.webinterface.view.SimpleViewAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,22 +33,43 @@ public class MainPageController {
     String home(
                 @PathVariable(required = false) Long groupId,
                 @PathVariable(required = false) Long noteId,
-//                @RequestParam(value = "search",         required = false, defaultValue = "")    String search,
-//                @RequestParam(value = "search_groups",  required = false, defaultValue = "on")  Boolean searchGroups,
-//                @RequestParam(value = "search_notes",   required = false, defaultValue = "on")  Boolean searchNotes,
             Principal principal, Model model) {
-//        if (!model.containsAttribute("search")) {
-//            model.addAttribute("search", search);
-//        }
-//        model.addAttribute("search_groups",(boolean) searchGroups);
-//        model.addAttribute("search_notes", (boolean) searchNotes);
+        boolean filterGroups = false;
+        boolean filterNotes = false;
+
+
+
 
         User user = storage.user.getByUsername(principal.getName());
         model.addAttribute("user", user);
-        List<Group> groups = storage.group.findByUserOrderByName(user);
-        model.addAttribute("groups", groups);
+        List<Group> searchGroups = storage.group.findByUserOrderByName(user);
 
-        Group currentGroup = groups.get(0);
+        List<Group> groups = new ArrayList<>();
+        List<Group> defFixed = new ArrayList<>();
+        List<Group> fixed = new ArrayList<>();
+
+        for (Group group : searchGroups) {
+            if (group.testFlag(GroupFlags.FIXED_LEVEL_ROOT)) {
+                defFixed.add(group);
+            }
+            else if (group.testFlag(GroupFlags.FIXED_USER)) {
+                fixed.add(group);
+            } else {
+                groups.add(group);
+            }
+        }
+        searchGroups = null;
+        LinkedList<List<Group>> superGroups = new LinkedList<>();
+        superGroups.add(defFixed);
+        superGroups.add(fixed);
+        superGroups.add(groups);
+        model.addAttribute("superGroups", superGroups);
+
+
+
+        Group currentGroup = defFixed.get(0);
+        if (groups.size() > 0)
+            currentGroup = groups.get(0);
 
         if (groupId != null) {
             Optional<Group> selected = storage.group.findById(groupId);
@@ -56,6 +77,8 @@ public class MainPageController {
                 currentGroup = selected.get();
             }
         }
+        model.addAttribute("noAdd", currentGroup.testFlag(GroupFlags.NO_ADD));
+
 
         model.addAttribute("selectedGroup", currentGroup.getId());
         TreeSet<Note> notes = new TreeSet<>(Comparator.comparing(Note::getUpdateDate).reversed());

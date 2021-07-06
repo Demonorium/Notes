@@ -30,6 +30,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/home").setViewName("redirect:/home/-1/-1");
+        registry.addViewController("/error").setViewName("error");
     }
 
     @Override
@@ -55,7 +56,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/home-promo", "/registration", "/request/safe/**").permitAll()
+                    .antMatchers("/", "/home-promo", "/registration", "/share/**").permitAll()
                     .anyRequest().authenticated();
         http
                 .formLogin()

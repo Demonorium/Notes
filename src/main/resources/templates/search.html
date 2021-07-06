@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-responsive.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/scss" th:href="@{/css/tt.scss}"/>
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js">
+  </script>
+  <title>Notes</title>
+</head>
+
+
+<body class="back-color-main" id = "root_element">
+<header class="row-fluid">
+  <div class="span1 p-0 text-right">
+    <a th:href="@{/}">
+      <svg xmlns="http://www.w3.org/2000/svg" height="4.5rem" fill="currentColor" class="bi bi-sticky text-color-light p-3" viewBox="0 0 16 16">
+        <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1h-11zM2 2.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5V8H9.5A1.5 1.5 0 0 0 8 9.5V14H2.5a.5.5 0 0 1-.5-.5v-11zm7 11.293V9.5a.5.5 0 0 1 .5-.5h4.293L9 13.793z"/>
+      </svg>
+    </a>
+  </div>
+  <div class="span3 p-0 m-0 text-left">
+    <h1 class="text-color-light p-0 m-0">Notes</h1>
+    <p  class="text-color-light p-0 m-0">© Круглов Игорь 2021</p>
+  </div>
+  <div class="span4 p-0">
+    <form method="get" th:action="@{/search}">
+      <fieldset>
+        <div class ="row-fluid">
+          <div class="span8">
+            <input type="search" placeholder="Поиск" name="search" class="row-fluid search-query text-color-light back-color-md search-class"
+                   style="border:0" th:field="${searchInput}"/>
+          </div>
+          <div class="span3">
+            <button type="submit" class="btn back-color-md" value="Найти">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class ="row-fluid">
+          <div class="span6">
+            <label class="check-box">
+              <input type="radio" name="search_notes" value="1" th:field="${searchTarget}"/> По группам
+            </label>
+          </div>
+          <div class="span6">
+            <label class="check-box">
+              <input type="radio" name="search_notes" value="2" th:field="${searchTarget}"/> По заметкам
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class = "span3 p-0 fill-col text-right">
+    <div class="btn-group fill-block">
+      <button type="button" class="btn userblock back-color-no text-color-light">
+        <h3 class="d-inline" th:text="${user.username}"></h3>
+        <img th:src="'/img/'+${user.username}+'.png'" class="img-thumbnail"/>
+      </button>
+
+      <button type="button" class="btn back-color-no dropdown-toggle dropdown-toggle-split"
+              style="max-width: 1.5vw" data-toggle="dropdown" aria-expanded="false">
+      </button>
+
+      <ul class="dropdown-menu">
+        <li>
+          <form th:action="@{/profile}" method="get">
+            <input type="submit" value="Профиль" class="dropdown-item text-color-ref"/>
+          </form>
+        </li>
+        <li>
+          <form th:action="@{/settings}" method="get">
+            <input type="submit" value="Настройки" class="dropdown-item text-color-ref"/>
+          </form>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выход" class="dropdown-item font-red"/>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+</body>
+</html>

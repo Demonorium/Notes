@@ -1,10 +1,10 @@
 package com.demonorium.security;
 
+import com.demonorium.utils.GroupFlags;
 import com.demonorium.database.StorageController;
 import com.demonorium.database.entity.Group;
 import com.demonorium.database.entity.Note;
 import com.demonorium.database.entity.User;
-import com.demonorium.database.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,10 +38,16 @@ public class AppUserDetailsService implements UserDetailsService {
         if (user == null) {
             user = new User(username, email, bCryptPasswordEncoder.encode(password));
             storage.user.save(user);
-            Group group = new Group("default", user);
+            Group group = new Group("Группа заметок", user);
             storage.group.save(group);
-            Group avvv = new Group("Доступные мне", user);
-            storage.group.save(avvv);
+            Group available = new Group("Доступные мне", user);
+            available.onFlag(
+                    GroupFlags.DEFAULT.flag()
+                    | GroupFlags.NO_RENAME.flag()
+                    | GroupFlags.FIXED_LEVEL_ROOT.flag()
+                    | GroupFlags.NO_ADD.flag());
+
+            storage.group.save(available);
 
             storage.note.save(new Note(
                     "Добро пожаловать",

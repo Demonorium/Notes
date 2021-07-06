@@ -11,9 +11,11 @@ public class Note {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String name;
+    @Column(length = 20000)
     private String content;
 
     private String description;
+    private String sharecode = null;
 
     private Date creationDate;
     private Date updateDate;
@@ -111,4 +113,11 @@ public class Note {
                 '}';
     }
 
+    public String getSharecode() {
+        return sharecode;
+    }
+
+    public void setSharecode(String sharecode) {
+        this.sharecode = sharecode;
+    }
 }
