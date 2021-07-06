@@ -27,12 +27,12 @@
     <p  class="text-color-light p-0 m-0">© Круглов Игорь 2021</p>
   </div>
   <div class="span4 p-0">
-    <form method="get" th:action="@{/search}">
+    <form method="get" th:action="@{/search}" th:object="${search}">
       <fieldset>
         <div class ="row-fluid">
           <div class="span8">
             <input type="search" placeholder="Поиск" name="search" class="row-fluid search-query text-color-light back-color-md search-class"
-                   style="border:0" th:field="${searchInput}"/>
+                   style="border:0" th:field="${search.input}"/>
           </div>
           <div class="span3">
             <button type="submit" class="btn back-color-md" value="Найти">
@@ -46,12 +46,12 @@
         <div class ="row-fluid">
           <div class="span6">
             <label class="check-box">
-              <input type="radio" name="search_notes" value="1" th:field="${searchTarget}"/> По группам
+              <input type="radio" name="search_notes" value="1" th:field="${search.target}"/> По группам
             </label>
           </div>
           <div class="span6">
             <label class="check-box">
-              <input type="radio" name="search_notes" value="2" th:field="${searchTarget}"/> По заметкам
+              <input type="radio" name="search_notes" value="2" th:field="${search.target}"/> По заметкам
             </label>
           </div>
         </div>
@@ -90,5 +90,28 @@
     </div>
   </div>
 </header>
+<hr/>
+
+<div class="container">
+  <div class="fill-row text-center">
+    <div class="col-6 d-inline-block text-center"><h1>Результат</h1></div>
+    <p></p>
+    <div class="col-6 d-inline-block text-center"><a class="text-color-ref" th:href="@{/}">Вернуться на главную</a></div>
+  </div>
+  <hr/>
+  <div th:if="${isNotes}">
+    <a th:each="note: ${list}" class="btn btn-outline-info back-color-md d-inline-block col-3" th:href="'/home/'+${note.group.id}+'/'+${note.id}">
+      <p th:text="'\'' + ${note.name} + '\''"></p>
+      <p th:text="'Содержимое: ' + ${note.description}"></p>
+    </a>
+  </div>
+
+  <div th:unless="${isNotes}">
+      <a th:each="group: ${list}" class="btn btn-outline-info back-color-md d-inline-block col-3" th:href="'/home/'+${group.id}+'/-1'">
+        <p th:text="'\'' + ${group.name} + '\''"></p>
+        <p th:text="'Заметок в группе: ' + ${group.notes.size()}"></p>
+      </a>
+  </div>
+</div>
 </body>
 </html>

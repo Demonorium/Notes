@@ -6,6 +6,8 @@ import com.demonorium.database.entity.Group;
 import com.demonorium.database.entity.Note;
 import com.demonorium.database.entity.User;
 import com.demonorium.webinterface.view.NoteView;
+import com.demonorium.webinterface.view.SearchView;
+import com.demonorium.webinterface.view.SimpleViewAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,11 +36,6 @@ public class MainPageController {
                 @PathVariable(required = false) Long groupId,
                 @PathVariable(required = false) Long noteId,
             Principal principal, Model model) {
-        boolean filterGroups = false;
-        boolean filterNotes = false;
-
-
-
 
         User user = storage.user.getByUsername(principal.getName());
         model.addAttribute("user", user);
@@ -64,7 +61,6 @@ public class MainPageController {
         superGroups.add(fixed);
         superGroups.add(groups);
         model.addAttribute("superGroups", superGroups);
-
 
 
         Group currentGroup = defFixed.get(0);
@@ -97,6 +93,7 @@ public class MainPageController {
             }
         }
 
+        model.addAttribute("search", new SearchView());
         return "home";
     }
 }

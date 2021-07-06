@@ -12,4 +12,5 @@ import java.util.*;
 public interface NoteRepository extends JpaRepository<Note, Long> {
     Note getNoteById(Long id);
     List<Note> getAllByGroup(Group group);
+    List<Note> findAllByGroupInAndNameLikeOrderByName(List<Group> groups, String name);
 }

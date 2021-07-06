@@ -56,7 +56,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/home-promo", "/registration", "/share/**").permitAll()
+                    .antMatchers("/", "/home-promo", "/error", "/registration", "/share/**").permitAll()
                     .anyRequest().authenticated();
         http
                 .formLogin()

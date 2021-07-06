@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "TABLE_NOTES")
-public class Note {
+public class Note{
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
