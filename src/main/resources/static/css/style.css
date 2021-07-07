@@ -102,15 +102,18 @@ hr {
 .btn-table-big {
     padding:0;
     width:90%;
+
 }
 .btn-table {
     padding:0;
-    width:80%;
+    width:100%;
     height:100%;
 }
+
 .btn-table tr{
     padding: 0;
 }
+
 .error {
     color: #ff3131!important;
 }
@@ -144,17 +147,21 @@ hr {
 
 .input-field-main {
     width: 100%;
-    height: 75vh;
+    height: 81vh;
     border: 0;
     resize: none!important;
+    padding-right: 0.75em;
+    padding-left: 0.75em;
+    padding-top: 0.5em;
 }
 .square {
     padding-bottom: 100%;
 }
 .input-field-name {
-    width: 80%;
+    width: 100%;
     height: 4vh;
     border: 0;
+    padding: 0.5em 0.75em;
 }
 .input-field-name:focus, .input-field-main:focus {
     outline: none;
@@ -199,4 +206,21 @@ hr {
 }
 .logic-offset {
     margin: 0.25rem;
+}
+.my-dropdown-toggle::after {
+    content: none!important;
+}
+.align-center {
+    vertical-align: center;
+}
+.dpd {
+    padding: 1px 6px!important;
+}
+
+.v-margin{
+    margin-top: 0.65rem;
+    margin-bottom: 0.65rem;
+}
+.min-size-28px {
+    min-height: 28px;
 }

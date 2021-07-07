@@ -42,7 +42,7 @@ public class ApiController {
     }
 
     @GetMapping("/request/save_note")
-    public ResponseEntity<SimpleViewAdapter<String>> saveNote(
+    public ResponseEntity<NoteView> saveNote(
             @RequestParam("id") Long id,
             @RequestParam("name") String name,
             @RequestParam("body") String body,
@@ -57,11 +57,11 @@ public class ApiController {
                 edit.setName(name);
                 edit.setContent(body);
                 storage.updateNote(edit);
-                return ResponseEntity.ok(new SimpleViewAdapter<String>(edit.getDescription()));
+                return ResponseEntity.ok(new NoteView(edit.getName(), edit.getDescription()));
             }
         }
 
-        return ResponseEntity.badRequest().body(new SimpleViewAdapter<>("error"));
+        return ResponseEntity.badRequest().body(new NoteView("error", "error"));
     }
 
 

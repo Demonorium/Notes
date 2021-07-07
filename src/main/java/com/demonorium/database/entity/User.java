@@ -3,6 +3,7 @@ package com.demonorium.database.entity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,9 +19,6 @@ public class User {
     private String username;
     private String email;
     private String password;
-
-
-
 
     protected User() {}
 

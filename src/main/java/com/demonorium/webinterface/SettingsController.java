@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,13 +22,21 @@ public class SettingsController {
     @Autowired
     AppUserDetailsService userDetailsService;
 
-    @GetMapping("/settings")
-    String settings(Principal principal, Model model) {
-        User user = storage.user.getByUsername(principal.getName());
-        model.addAttribute("user", user);
-
-        return "settings";
-    }
+//    @GetMapping("/settings")
+//    String settings(Principal principal, Model model) {
+//        User user = storage.user.getByUsername(principal.getName());
+//        model.addAttribute("user", user);
+//        return "settings";
+//    }
+//
+//    @GetMapping("/settings/edit")
+//    String settings(@ModelAttribute("user") User userparam, Principal principal, Model model) {
+//        User user = storage.user.getByUsername(principal.getName());
+//        user.setAutosave(userparam.getAutosave());
+//        storage.user.save(user);
+//        model.addAttribute("user", user);
+//        return "settings";
+//    }
 
     @GetMapping("/profile")
     String profile(Principal principal, Model model) {
@@ -49,6 +58,14 @@ public class SettingsController {
     ModelAndView removeProfile(@RequestParam("password") String password, Principal principal, Model model) {
         if (userDetailsService.removeUser(password, principal.getName())) {
             return new ModelAndView("redirect:/logout");
+        }
+        return new ModelAndView("redirect:/profile");
+    }
+
+    @PostMapping("/profile/change_password")
+    ModelAndView changePassword(@RequestParam("password") String password, @RequestParam("new_password") String newPassword, Principal principal, Model model) {
+        if (userDetailsService.changePassword(password, newPassword, principal.getName())) {
+            return new ModelAndView("redirect:/profile");
         }
 
         return new ModelAndView("redirect:/profile");

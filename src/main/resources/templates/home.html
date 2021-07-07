@@ -6,14 +6,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
 
+    <script th:text="'groupID = ' + ${selectedGroup}"></script>
+    <script th:if="${noteIsSelected}" th:text="'noteID = ' + ${selectedNote}"></script>
 
-    <script th:if="${noteIsSelected}" th:text="'noteID = ' + ${selectedNote}">
-
-    </script>
     <script th:if="${noteIsSelected}">
         function saveNote(sourceID, upd) {
             let note_name = document.getElementById("note-name")
@@ -37,63 +33,7 @@
 
     <script>
         path = window.location.host
-
-        form_yes = null
-        form_no  = null
-        form_args = null
-        form_clear = null
-
-        function ask(msg, args, yes_func, no_func) {
-            form_args = args
-            form_yes  = yes_func
-            form_no   = no_func
-
-            let root = document.getElementById("root_element")
-            let msg_box = document.createElement("div")
-            let filler = document.createElement("div")
-            filler.setAttribute("class", "filler")
-            filler.setAttribute("onclick", "event.stopPropagation()")
-            root.appendChild(filler)
-            msg_box.setAttribute("class", "align-content-center my-modal p-3 back-color-md")
-            let msg_info = document.createElement("h4")
-            msg_info.textContent = msg
-            msg_box.appendChild(document.createElement("p"))
-            msg_box.appendChild(msg_info)
-            msg_box.appendChild(document.createElement("p"))
-            msg_box.appendChild(document.createElement("p"))
-            let table = document.createElement("table")
-            table.setAttribute("style", "width:100%")
-            let table_row = document.createElement("tr")
-            let bt1_container = document.createElement("td")
-            let bt2_container = document.createElement("td")
-
-            bt1_container.setAttribute("class", "text-center")
-            bt2_container.setAttribute("class", "text-center")
-
-            let bt_no = document.createElement("button")
-            bt_no.setAttribute("class", "btn btn-success btn-lg")
-            bt_no.setAttribute("onclick", "form_no(form_args); form_clear(); event.stopPropagation()")
-            bt_no.textContent = "Нет"
-
-            let bt_yes = document.createElement("button")
-            bt_yes.setAttribute("class", "btn btn-danger btn-lg")
-            bt_yes.setAttribute("onclick", "form_yes(form_args); form_clear(); event.stopPropagation()")
-            bt_yes.textContent = "Да"
-
-            form_clear = function() {
-                msg_box.remove()
-                filler.remove()
-            }
-
-            bt1_container.appendChild(bt_no)
-            bt2_container.appendChild(bt_yes)
-            table_row.appendChild(bt1_container)
-            table_row.appendChild(bt2_container)
-            table.appendChild(table_row)
-            msg_box.appendChild(table)
-            root.appendChild(msg_box)
-        }
-        function forceRemove(sourceID) {
+        function removeGroup(sourceID) {
             axios.get("/request/remove_group", {
                 withCredentials: true,
                 params: {
@@ -104,9 +44,6 @@
             });
 
             //document.getElementById(sourceID+"g").remove()
-        }
-        function nope(sourceID) {
-
         }
         async function groupSize(sourceID) {
             let size = -1
@@ -121,22 +58,7 @@
             return size
 
         }
-        function removeGroup(sourceID) {
-            let sizep = groupSize(sourceID)
-            sizep.then(function (size){
-                if (size == 0) {
-                   forceRemove(sourceID)
-                } else {
-                    ask("Вы уверены? Данную операцию нельзя отменить!", sourceID, forceRemove, nope)
-                }
-            })
-
-        }
-
         function removeNote(sourceID) {
-            ask("Вы уверены? Данную операцию нельзя отменить!", sourceID, removeNoteForce, nope)
-        }
-        function removeNoteForce(sourceID) {
             axios.get("/request/remove_note", {
                 withCredentials: true,
                 params: {
@@ -217,6 +139,68 @@
 
 
 <body class="back-color-main" id = "root_element">
+<!-- Удаление заметки -->
+<div class="modal fade" id="remove_note_id" tabindex="-1" aria-labelledby="removeNoteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-red" id="removeNoteLabel">Удаление заметки</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены? Удаление невозможно отменить!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-danger" onclick="removeNote(noteID)">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Удаление группы -->
+<div class="modal fade" id="remove_group_id" tabindex="-1" aria-labelledby="removeGroupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-red" id="removeGroupLabel">Удаление группы</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены? Удаление невозможно отменить!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-danger" onclick="removeGroup(groupID)">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Поделиться заметкой -->
+<div class="modal fade" id="share_note_id" tabindex="-1" aria-labelledby="shareNoteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-red" id="shareNoteLabel">Удаление группы</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid p-0 m-0">
     <header class="row p-0 m-0">
         <div class="col-1 p-0 text-right">
@@ -279,11 +263,6 @@
                             <input type="submit" value="Профиль" class="dropdown-item text-color-ref"/>
                         </form>
                     </li>
-                    <li>
-                        <form th:action="@{/settings}" method="get">
-                            <input type="submit" value="Настройки" class="dropdown-item text-color-ref"/>
-                        </form>
-                    </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form th:action="@{/logout}" method="post">
@@ -306,58 +285,65 @@
 
                 <hr/>
                 <div class ="fill-row">
-                    <div id = "list-groups" class="fill-row">
+                    <div id="list-groups" class="fill-row">
                         <div th:each="groups: ${superGroups}">
-                            <div class="fill-row" th:each="group: ${groups}">
 
+                            <div class="fill-row" th:each="group: ${groups}">
                                 <div th:id="${group.id} + 'g'">
-                                    <button th:class= "'btn d-block fill-row p-0 m-0 ' + (${group.id eq selectedGroup}?'back-color-md')"
+                                    <hr class="p-0 m-0"/>
+                                    <button th:class= "'btn fill-row p-0 m-0' + (${group.id eq selectedGroup}?'back-color-md')"
                                             th:onclick="${group.id != selectedGroup}?('location.replace(\'/home/'+${group.id} + '/-1\')')">
-                                        <div class="fill-block group-block"
-                                             th:id="${group.id}"
-                                             th:onclick ="${group.testFlag(8) or (group.id != selectedGroup)}?'':('event.stopPropagation()')"
-                                             th:ondblclick="${group.testFlag(8)}?'':('renameGroup('+${group.id}+');event.stopPropagation()')"
-                                             th:text="${group.name}">
-                                        </div>
+                                        <table class="btn-table">
+                                            <tr>
+                                               <td class="btn-table-big group-block align-center min-size-28px"
+                                                       th:id="${group.id}"
+                                                       th:onclick ="${group.testFlag(8) or (group.id != selectedGroup)}?'':('event.stopPropagation()')"
+                                                       th:ondblclick="${group.testFlag(8)}?'':('renameGroup('+${group.id}+');event.stopPropagation()')"
+                                                       th:text="${group.name}">
+                                               </td>
+                                                <td class="dropdown btn-table-small">
+                                                    <button th:if="${group.id eq selectedGroup}" class="dpd btn btn-outline-info my-dropdown-toggle" type="button" id="dropdownMenuButton-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                                        </svg>
+                                                    </button>
+                                                    <div th:if="${group.id eq selectedGroup}" class="dropdown-menu" aria-labelledby="dropdownMenuButton-2">
+                                                        <button
+                                                                th:unless="${group.testFlag(16)}"
+                                                                th:onclick="'location.replace(\'/request/new_note/'+${group.id}+'\')'"
+                                                                class = "dropdown-item text-color-ref">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                                                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                                            </svg>
+                                                            Создать заметку
+                                                        </button>
+                                                        <button
+                                                                th:unless="${group.testFlag(8)}"
+                                                                th:onclick="'renameGroup('+${group.id}+')'"
+                                                                class="dropdown-item text-color-ref">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                                            </svg>
+                                                            Переименовать группу
+                                                        </button>
+                                                        <div class="dropdown-divider"></div>
+                                                        <button th:unless="${group.testFlag(1)}"
+                                                                data-toggle="modal" data-target="#remove_group_id"
+                                                                class="dropdown-item font-red">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                                            </svg>
+                                                            Удалить группу
+                                                        </button>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        </table>
                                     </button>
                                     <hr class="p-0 m-0"/>
                                 </div>
-                                <table class="fill-row" th:if="${group.id eq selectedGroup}">
-                                    <tr>
-                                        <td>
-                                            <button th:unless="${group.testFlag(1)}"
-                                                    th:onclick="'removeGroup('+${group.id}+');event.stopPropagation()'"
-                                                    class="btn-outline-danger">
-                                                Удалить
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" viewBox="0 0 16 16">
-                                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                                                </svg>
-                                            </button>
-                                        </td>
-                                        <td class="text-right">
-                                            <button
-                                                    th:unless="${group.testFlag(8)}"
-                                                    th:onclick="'renameGroup('+${group.id}+')'"
-                                                    class="btn-outline-info d-inline-block">
-                                                Переименовать
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" viewBox="0 0 16 16">
-                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                                                </svg>
-                                            </button>
-                                            <button
-                                                    th:unless="${group.testFlag(16)}"
-                                                    th:onclick="'location.replace(\'/request/new_note/'+${group.id}+'\')'"
-                                                    class = "btn-outline-info d-inline-block">
-                                                Новая заметка
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
-                                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <hr th:if="${group.id eq selectedGroup}" class="p-0 m-0"/>
 
                                 <div class = "notes" th:if="${group.id eq selectedGroup}">
                                     <div class ="mark-block" th:each="note: ${notes}" th:id="${note.id} + 'n'">
@@ -389,34 +375,50 @@
             </div>
             <div class="col-9 no-vertical-offset no-right-offset">
                 <div th:if="${noteIsSelected}">
-                    <input onchange="saveNote(noteID, false)" autocomplete="off" id="note-name" type="text" placeholder="Название заметки" th:field="${note.name}" class="input-medium search-query text-color-light back-color-md input-field-name"/>
-                    <p class="logic-offset"></p>
-                    <div class="btn-block d-inline">
-                        <button class="btn back-color-md text-color-light" th:onclick="'saveNote('+ ${selectedNote} + ',true)'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
-                                <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
-                            </svg>
-                        </button>
+                    <div class="row p-0 m-0">
+                        <div class="col no-left-offset">
+                            <input onchange="saveNote(noteID, false)" autocomplete="off" id="note-name" type="text" placeholder="Название заметки"
+                                   th:field="${note.name}"
+                                   class="input-medium search-query input-field-name"/>
+                        </div>
 
-                        <button class="btn back-color-md text-color-light" th:onclick="'shareNote('+ ${selectedNote} + ')'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                                <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="fill-row text-right d-inline">
-                        <button class="btn back-color-md font-red" th:onclick="'removeNote('+ ${selectedNote} + ')'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                            </svg>
-                        </button>
+                        <div class="col-1 text-left no-left-offset">
+                            <div class="dropdown dropleft">
+                                <button class="btn btn-outline-info my-dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                    </svg>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="dropdown-item text-color-ref"
+                                            data-toggle="modal" data-target="#share_note_id">
+<!--                                            th:onclick="'shareNote('+ ${selectedNote} + ')'"-->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                                            <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                                        </svg>
+                                        Поделиться
+                                    </button>
+                                    <div class="dropdown-divider"></div>
+                                    <button class="dropdown-item font-red"
+                                            data-toggle="modal" data-target="#remove_note_id">
+<!--                                            th:onclick="'removeNote('+ ${selectedNote} + ')'">-->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                        </svg>
+                                        Удалить заметку
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <p class="logic-offset"></p>
-                    <textarea onchange="saveNote(noteID, false)" id="note-body" class="back-color-md text-color-light input-field-main" placeholder="Заметка" th:field="${note.content}"></textarea>
+                    <textarea onchange="saveNote(noteID, false)" id="note-body" class="input-field-main" placeholder="Заметка" th:field="${note.content}"></textarea>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </body>
 </html>

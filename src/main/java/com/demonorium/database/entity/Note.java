@@ -3,6 +3,7 @@ package com.demonorium.database.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
@@ -63,6 +64,10 @@ public class Note{
         return content;
     }
 
+    public String getFormattedDate() {
+        return new SimpleDateFormat("yyyy.MM.dd| HH:mm:ss").format(updateDate);
+    }
+
     public void setContent(String content) {
         this.content = content;
         if (content.length() > 23)
@@ -106,13 +111,13 @@ public class Note{
     @Override
     public String toString() {
         return "Note{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", content='" + content + '\'' +
-                ", creationDate=" + creationDate +
-                ", updateDate=" + updateDate +
-                ", group=" + group +
-                '}';
+                "\n\tid=" + id +
+                ",\n\t name='" + name + '\'' +
+                ",\n\t content='" + content + '\'' +
+                ",\n\t creationDate=" + creationDate +
+                ",\n\t updateDate=" + updateDate +
+                ",\n\t group=" + group +
+                "\n}";
     }
 
     public String getSharecode() {
