@@ -12,6 +12,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> getByUser(User user);
     Group getByName(String name);
     Group getById(Long id);
+    Group getByUserAndNetGroupIs(User user, boolean netGroup);
 
     List<Group> findByUserOrderByName(User user);
     List<Group> findByUser(User user);

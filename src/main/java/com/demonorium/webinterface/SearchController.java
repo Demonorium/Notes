@@ -55,5 +55,4 @@ public class SearchController {
         model.addAttribute("isNotes", false);
         return "search";
     }
-
 }

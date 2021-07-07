@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Entity
 public class Access {
     @Id
-    private String code;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
@@ -20,18 +21,18 @@ public class Access {
     public Access() {
     }
 
-    public Access(String code, User user, Note note) {
-        this.code = code;
+    public Access(User user, Note note) {
         this.user = user;
         this.note = note;
     }
 
-    public String getCode() {
-        return code;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getRights() {

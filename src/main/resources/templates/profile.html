@@ -10,6 +10,62 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
 
+    <script>
+        function create_text(id, place, text) {
+            let element = document.getElementById(id)
+            if (element == null) {
+                element = document.createElement("p")
+                element.setAttribute("class", id)
+                element.textContent = text
+                element.setAttribute("id", "pass-error")
+                document.getElementById(place).appendChild(element)
+            }
+        }
+
+        function change_pass() {
+            let pass = document.getElementById("password")
+            let n_pass1 = document.getElementById("ch-password")
+            let n_pass2 = document.getElementById("ch-password-2")
+            if (n_pass1.value === n_pass2.value) {
+                axios.get("/profile/change_password", {
+                    withCredentials: true,
+                    params: {
+                        "password": pass.value,
+                        "new_password": n_pass1.value
+                    }
+                }).then(function (object){
+                    location.reload()
+                }).catch(function (error) {
+                    console.log(error.data)
+                    create_text("pass-error", "pass_input", "Неверный пароль")
+                })
+            } else {
+                create_text("pass-neq", "pass_change", "Пароли не совпадают")
+            }
+        }
+
+        function remove_user() {
+            let pass = document.getElementById("password")
+            let mark = document.getElementById("remove-ready")
+            if (mark.checked) {
+                axios.get("/profile/remove_user", {
+                    withCredentials: true,
+                    params: {
+                        "password": pass.value
+                    }
+                }).then(function (object){
+                    axios.post("/logout", {withCredentials: true})
+                    location.reload()
+                }).catch(function (error) {
+                    console.log(error.data)
+                    create_text("pass-error", "pass_input", "Неверный пароль")
+                })
+            } else {
+                create_text("no-mark", "main-element", "Вы недостаточно хотите удалить свой аккаунт!")
+            }
+        }
+    </script>
+
     <title>Notes</title>
 </head>
 <body class="back-color-main" id = "root_element">
@@ -59,7 +115,7 @@
 
     <hr/>
 
-    <div class="container">
+    <div class="container" id="main-element">
         <h2>Профиль</h2>
         <div class="fill-row">
             <img th:src="'/uploads/'+${user.username}+'.png'" class="d-inline img-thumbnail"/>
@@ -74,21 +130,26 @@
         </div>
 
         <hr class="p-5"/>
+        <div id="pass_input">
         <h2 class="font-red">Опасная зона</h2>
         <h3 class="d-inline">Введите пароль: </h3> <input class="d-inline" id="password" type="password"/>
+
+        </div>
         <hr/>
+        <div id="pass_change">
         <h2 class="font-red">Смена пароля: </h2>
-        <table>
-            <tr>
-                <td>Новый пароль: </td>
-                <td><input class="d-inline" id="ch-password" type="password" autocomplete="false"/></td>
-            </tr>
-            <tr>
-                <td>Новый пароль ещё раз: </td>
-                <td><input class="d-inline" id="ch-password-2" type="password" autocomplete="false"/></td>
-            </tr>
-        </table>
-        <button class="btn btn-danger" onclick="change_pass()">Сменить пароль</button>
+            <table>
+                <tr>
+                    <td>Новый пароль: </td>
+                    <td><input class="d-inline" id="ch-password" type="password" autocomplete="false"/></td>
+                </tr>
+                <tr>
+                    <td>Новый пароль ещё раз: </td>
+                    <td><input class="d-inline" id="ch-password-2" type="password" autocomplete="false"/></td>
+                </tr>
+            </table>
+            <button class="btn btn-danger" onclick="change_pass()">Сменить пароль</button>
+        </div>
         <hr/>
         <hr/>
         <h2 class="font-red">Удалить пользователя</h2>

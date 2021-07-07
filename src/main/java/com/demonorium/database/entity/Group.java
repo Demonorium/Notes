@@ -14,7 +14,9 @@ public class Group {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToOne
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)

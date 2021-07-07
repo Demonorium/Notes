@@ -11,5 +11,5 @@ import java.util.List;
 public interface AccessRepository extends JpaRepository<Access, String>  {
     List<Access> getByUser(User user);
     List<Access> getByNote(Note note);
-
+    Access getByUserAndNote(User user, Note note);
 }

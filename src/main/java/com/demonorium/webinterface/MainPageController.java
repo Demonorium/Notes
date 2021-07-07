@@ -62,7 +62,6 @@ public class MainPageController {
         superGroups.add(groups);
         model.addAttribute("superGroups", superGroups);
 
-
         Group currentGroup = defFixed.get(0);
         if (groups.size() > 0)
             currentGroup = groups.get(0);
@@ -88,8 +87,6 @@ public class MainPageController {
             notes.addAll(currentGroup.getNotes());
             model.addAttribute("notes", notes);
         }
-
-
 
         model.addAttribute("noteIsSelected", false);
         model.addAttribute("selectedNote", -1);

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,9 @@ public class Note{
     @JoinColumn(name="group_id", nullable = false)
     private Group group;
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "note", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Set<Access> accesses = new HashSet<>(32);
     protected Note() {}
 
     public Note(String name, String content, Group group) {
@@ -42,6 +45,14 @@ public class Note{
             description = content;
 
         this.group = group;
+    }
+
+    public Set<Access> getAccesses() {
+        return accesses;
+    }
+
+    public void setAccesses(Set<Access> accesses) {
+        this.accesses = accesses;
     }
 
     public Long getId() {

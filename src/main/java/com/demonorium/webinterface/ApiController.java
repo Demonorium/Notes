@@ -169,6 +169,24 @@ public class ApiController {
         return ResponseEntity.badRequest().body("/home");
     }
 
+    @GetMapping("/request/share_note")
+    public ResponseEntity<String> shareNote(@RequestParam("id") Long id, Principal principal) {
+        User user = storage.user.getByUsername(principal.getName());
+
+        if (id != null) {
+            Optional<Note> note = storage.note.findById(id);
+            if (access(user, note)) {
+                String token = storage.generateAccessToken(note.get());
+                note.get().setSharecode(token);
+                storage.note.save(note.get());
+                return ResponseEntity.ok(token);
+            }
+        }
+
+        return ResponseEntity.badRequest().body("No access");
+    }
+
+
     @GetMapping("/request/group_size")
     public ResponseEntity<SimpleViewAdapter<Integer>> getSize(@RequestParam("id") Long id, Principal principal) {
         User user = storage.user.getByUsername(principal.getName());

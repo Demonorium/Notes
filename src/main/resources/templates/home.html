@@ -24,6 +24,13 @@
             }).then(function (object){
                 if (upd) {
                     location.reload()
+                } else {
+                    let newName = object.data['name']
+                    let newDescr = object.data['content']
+                    let note_name_object = document.getElementById(sourceID + "_name")
+                    note_name_object.textContent = newName
+                    let note_descr_object = document.getElementById(sourceID + "_descr")
+                    note_descr_object.textContent = newDescr
                 }
             });
 
@@ -342,21 +349,22 @@
                                             </tr>
                                         </table>
                                     </button>
-                                    <hr class="p-0 m-0"/>
+<!--                                    <hr class="p-0 m-0"/>-->
                                 </div>
 
                                 <div class = "notes" th:if="${group.id eq selectedGroup}">
                                     <div class ="mark-block" th:each="note: ${notes}" th:id="${note.id} + 'n'">
+                                        <hr class="p-0 m-0"/>
                                         <button class = "btn d-block mark-block p-0 m-0" th:onclick="'location.replace(\'/home/'+${selectedGroup}+'/'+${note.id}+'\')'">
                                             <div th:class="'fill-block ' + (${note.id eq selectedNote}?'back-color-md')">
                                                 <table class = "btn-table">
                                                     <tr>
-                                                        <td class="btn-table-big" th:id="${note.id}" th:text="${note.name}"></td>
+                                                        <td class="btn-table-big" th:id="${note.id} + '_name'" th:text="${note.name}"></td>
                                                         <td class="btn-table-small">
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="btn-table-big" th:text="${note.description}">
+                                                        <td class="btn-table-big" th:id = "${note.id} + '_descr'" th:text="${note.description}">
 
                                                         </td>
                                                         <td class="btn-table-small">
@@ -365,7 +373,6 @@
                                                 </table>
                                             </div>
                                         </button>
-                                        <hr class="p-0 m-0"/>
                                     </div>
                                 </div>
                             </div>
@@ -401,7 +408,6 @@
                                     <div class="dropdown-divider"></div>
                                     <button class="dropdown-item font-red"
                                             data-toggle="modal" data-target="#remove_note_id">
-<!--                                            th:onclick="'removeNote('+ ${selectedNote} + ')'">-->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                         </svg>
@@ -412,7 +418,8 @@
                         </div>
                     </div>
                     <p class="logic-offset"></p>
-                    <textarea onchange="saveNote(noteID, false)" id="note-body" class="input-field-main" placeholder="Заметка" th:field="${note.content}"></textarea>
+                   <textarea onchange="saveNote(noteID, false)" id="note-body" class="input-field-main" placeholder="Заметка" th:field="${note.content}"></textarea>
+
                 </div>
             </div>
         </div>

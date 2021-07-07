@@ -125,6 +125,9 @@ hr {
 .text-color-ref {
     color: #3762c4;
 }
+.back-color-light {
+   background-color: #C7E0F9;
+}
 
 .text-color-light {
     color: #00acac;
@@ -146,22 +149,21 @@ hr {
 }
 
 .input-field-main {
-    width: 100%;
+    width: 96%;
     height: 81vh;
     border: 0;
     resize: none!important;
     padding-right: 0.75em;
     padding-left: 0.75em;
     padding-top: 0.5em;
-}
-.square {
-    padding-bottom: 100%;
+    background-color: #E8F2FF;
 }
 .input-field-name {
     width: 100%;
     height: 4vh;
     border: 0;
     padding: 0.5em 0.75em;
+    background-color: #E8F2FF;
 }
 .input-field-name:focus, .input-field-main:focus {
     outline: none;
