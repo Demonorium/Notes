@@ -10,4 +10,5 @@ public interface AccessRepository extends JpaRepository<Access, String>  {
     List<Access> getByAccessReference(NoteAccessReference accessReference);
     Access getByUserAndAccessReference(User user, NoteAccessReference accessReference);
     List<Access> getByUserAndAccessReference_NoteIs(User user, Note note);
+    List<Access> getByUserAndAccessReference_NoteNameLike(User user, String name);
 }

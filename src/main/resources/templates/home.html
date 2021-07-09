@@ -96,7 +96,7 @@
 
             name.textContent = ""
             name.appendChild(element)
-            element.addEventListener('focusout', function (event) {
+            let endEvent = function (event) {
                 if ((element.value == null) || (element.value === "")) {
                     name.textContent = defName
                 } else {
@@ -110,16 +110,15 @@
                     });
                 }
                 element.remove()
+            }
+            element.addEventListener('focusout',endEvent)
+
+            element.addEventListener('keydown', function(e) {
+                if (e.key == 'Enter') {
+                    endEvent()
+                }
             });
-            element.addEventListener('keyup', function (ev) {
-                ev.stopPropagation()
-            })
-            element.addEventListener('keydown', function (ev) {
-                ev.stopPropagation()
-            })
-            element.addEventListener('keypress', function (ev) {
-                ev.stopPropagation()
-            })
+
             element.focus()
         }
 
@@ -130,7 +129,7 @@
             element.setAttribute("class", "group-edit")
 
             lst.insertBefore(element, lst.firstChild)
-            element.addEventListener('focusout', function (event) {
+            let endEvent = function (event) {
                 if ((element.value == null) || (element.value === "")) {
                     element.remove()
                 } else {
@@ -142,6 +141,13 @@
                     }).then(res => {
                         location.reload()
                     });
+                }
+            }
+
+            element.addEventListener('focusout',endEvent)
+            element.addEventListener('keydown', function(e) {
+                if (e.key == 'Enter') {
+                    endEvent()
                 }
             });
             element.focus()

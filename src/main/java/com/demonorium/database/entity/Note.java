@@ -40,8 +40,8 @@ public class Note{
         this.content = content;
         this.creationDate = new Date();
         this.updateDate = this.creationDate;
-        if (content.length() > 23)
-            description = content.substring(0, 20) + "...";
+        if (content.length() > 20)
+            description = content.substring(0, 17) + "...";
         else
             description = content;
 
@@ -82,8 +82,8 @@ public class Note{
 
     public void setContent(String content) {
         this.content = content;
-        if (content.length() > 23)
-            description = content.substring(0, 20) + "...";
+        if (content.length() > 20)
+            description = content.substring(0, 17) + "...";
         else
             description = content;
     }

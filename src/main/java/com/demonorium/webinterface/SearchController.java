@@ -1,9 +1,12 @@
 package com.demonorium.webinterface;
 
 import com.demonorium.database.StorageController;
+import com.demonorium.database.entity.Access;
 import com.demonorium.database.entity.Group;
 import com.demonorium.database.entity.Note;
 import com.demonorium.database.entity.User;
+import com.demonorium.utils.AccessRights;
+import com.demonorium.webinterface.view.NoteView;
 import com.demonorium.webinterface.view.SearchView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.security.Principal;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class SearchController {
@@ -39,6 +41,14 @@ public class SearchController {
                     break;
                 case 2:
                     List<Note> notes = storage.note.findAllByGroupInAndNameLikeOrderByName(storage.group.findByUser(user), "%"+search.getInput()+"%");
+                    List<Access> accesses = storage.access.getByUserAndAccessReference_NoteNameLike(user, "%"+search.getInput()+"%");
+                    if (!accesses.isEmpty()) {
+                        Set<Note> set = new TreeSet<>(Comparator.comparing(Note::getId));
+                        for (Access access: accesses)
+                            set.add(access.getAccessReference().getNote());
+                        notes.addAll(set);
+                    }
+
                     model.addAttribute("list", notes);
                     model.addAttribute("isNotes", true);
                     break;
