@@ -1,12 +1,12 @@
 package com.demonorium.webinterface;
 
 import com.demonorium.database.StorageController;
-import com.demonorium.database.entity.Group;
-import com.demonorium.database.entity.Note;
-import com.demonorium.database.entity.User;
+import com.demonorium.database.entity.*;
+import com.demonorium.utils.AccessRights;
 import com.demonorium.utils.GroupFlags;
 import com.demonorium.webinterface.view.NoteView;
 import com.demonorium.webinterface.view.SimpleViewAdapter;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -23,22 +24,49 @@ public class ApiController {
     @Autowired
     StorageController storage;
 
-    private static boolean access(User user, Optional instance) {
+    private int getRights(User user, Note note) {
+        List<Access> accesses = storage.access.getByUserAndAccessReference_NoteIs(user, note);
+        return getRights(accesses);
+    }
+    private int getRights(List<Access> accesses) {
+        int rights = 0;
+        for (Access access: accesses) {
+            rights |= access.getAccessReference().getRights();
+        }
+        return rights;
+    }
+
+    private boolean access(User user, Optional instance, int group, int note) {
         if (instance.isPresent()) {
             if (instance.get() instanceof Group)
-                return access(user, (Group) instance.get());
+                return access(user, (Group) instance.get(), group);
             if (instance.get() instanceof Note)
-                return access(user, (Note) instance.get());
+                return access(user, (Note) instance.get(), group, note);
         }
         return false;
     }
-    private static boolean access(User user, Group group) {
-        return group.getUser() == user;
+    private boolean access(User user, Optional instance, int group) {
+        return access(user, instance, group, 0);
+    }
+    private boolean access(User user, Group group, int rights) {
+        return (group.getUser() == user) && !group.testFlag(rights);
     }
 
 
-    private static boolean access(User user, Note note) {
-        return access(user, note.getGroup());
+    private boolean access(User user, Note note, int group, int rights) {
+        if (access(user, note.getGroup(), group)) {
+            return true;
+        }
+
+        List<Access> accesses = storage.access.getByUserAndAccessReference_NoteIs(user, note);
+        if (accesses.isEmpty())
+            return false;
+        if (rights == 0)
+            return true;
+
+        //Если пересещение имеющихся и требуемых прав
+        //совпадает с требуемым, то прав достаточно
+        return (getRights(accesses) & rights) == rights;
     }
 
     @GetMapping("/request/save_note")
@@ -52,7 +80,7 @@ public class ApiController {
 
         if (id != null) {
             Optional<Note> note = storage.note.findById(id);
-            if (access(user, note)) {
+            if (access(user, note, 0)) {
                 Note edit = note.get();
                 edit.setName(name);
                 edit.setContent(body);
@@ -82,7 +110,7 @@ public class ApiController {
             return "redirect:/home";
 
         User user = storage.user.getByUsername(principal.getName());
-        if (access(user, group)) {
+        if (access(user, note, 0, AccessRights.WRITE.flag())) {
             note.setName(form.getName());
             note.setContent(form.getContent());
             storage.updateNote(note);
@@ -99,7 +127,7 @@ public class ApiController {
             return "redirect:/home";
         }
         Optional<Group> group = storage.group.findById(selectedGroup);
-        if (access(user, group)) {
+        if (access(user, group, GroupFlags.NO_ADD.flag())) {
             Note note = new Note("", "", group.get());
             storage.note.save(note);
             return "redirect:/home/"+selectedGroup+"/"+note.getId();
@@ -126,9 +154,7 @@ public class ApiController {
 
         if ((id != null) && (name != null)) {
             Optional<Group> group = storage.group.findById(id);
-            if (access(user, group)) {
-                if (group.get().testFlag(GroupFlags.NO_RENAME))
-                    return ResponseEntity.unprocessableEntity().body("NO RENAME");
+            if (access(user, group, GroupFlags.NO_RENAME.flag())) {
 
                 group.get().setName(name);
                 storage.group.save(group.get());
@@ -146,7 +172,7 @@ public class ApiController {
 
         if (id != null) {
             Optional<Group> group = storage.group.findById(id);
-            if (access(user, group)) {
+            if (access(user, group, GroupFlags.DEFAULT.flag())) {
                 storage.group.delete(group.get());
                 return ResponseEntity.ok("");
             }
@@ -160,7 +186,7 @@ public class ApiController {
 
         if (id != null) {
             Optional<Note> note = storage.note.findById(id);
-            if (access(user, note)) {
+            if (access(user, note, 0, AccessRights.REMOVE.flag())) {
                 storage.removeNote(note.get());
                 return ResponseEntity.ok("");
             }
@@ -170,20 +196,32 @@ public class ApiController {
     }
 
     @GetMapping("/request/share_note")
-    public ResponseEntity<String> shareNote(@RequestParam("id") Long id, Principal principal) {
+    public ResponseEntity<SimpleViewAdapter<String>> shareNote(
+            @RequestParam("id")     Long id,
+            @RequestParam("write")  Boolean write,
+            @RequestParam("remove") Boolean remove,
+            @RequestParam("share")  Boolean share,
+            Principal principal) {
         User user = storage.user.getByUsername(principal.getName());
 
         if (id != null) {
             Optional<Note> note = storage.note.findById(id);
-            if (access(user, note)) {
-                String token = storage.generateAccessToken(note.get());
-                note.get().setSharecode(token);
-                storage.note.save(note.get());
-                return ResponseEntity.ok(token);
+            int rights = (write? AccessRights.WRITE.flag() : 0)
+                    |   (remove? AccessRights.REMOVE.flag() : 0)
+                    |   (share? AccessRights.SHARE.flag() : 0);
+            if (access(user, note, 0, AccessRights.SHARE.flag() | rights)) {
+                NoteAccessReference reference = storage.refs.getByUser(user);
+                if (reference != null)
+                    storage.refs.delete(reference);
+
+                String token = storage.generateAccessToken(note.get(), rights);
+                reference = new NoteAccessReference(token, note.get(), user, rights);
+                storage.refs.save(reference);
+                return ResponseEntity.ok(new SimpleViewAdapter<>(token));
             }
         }
 
-        return ResponseEntity.badRequest().body("No access");
+        return ResponseEntity.badRequest().body(new SimpleViewAdapter<>("No access"));
     }
 
 
@@ -193,7 +231,7 @@ public class ApiController {
 
         if (id != null) {
             Optional<Group> group = storage.group.findById(id);
-            if (access(user, group)) {
+            if (access(user, group, 0)) {
                 return ResponseEntity.ok(new SimpleViewAdapter<>(group.get().getNotes().size()));
             }
         }

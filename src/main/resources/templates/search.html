@@ -64,7 +64,7 @@
       <div class="btn-group fill-block">
         <button type="button" class="btn userblock back-color-no text-color-light">
           <h3 class="d-inline" th:text="${user.username}"></h3>
-          <img th:src="@{'/uploads/'+${user.username}+'.png'}" class="img-thumbnail"/>
+<!--          <img th:src="@{'/uploads/'+${user.username}+'.png'}" class="img-thumbnail"/>-->
         </button>
 
         <button type="button" class="btn back-color-no dropdown-toggle dropdown-toggle-split"
@@ -104,7 +104,10 @@
     <div th:if="${isNotes}">
       <a th:each="note: ${list}" class="btn btn-outline-info back-color-md d-inline-block col-3" th:href="'/home/'+${note.group.id}+'/'+${note.id}">
         <p th:text="'\'' + ${note.name} + '\''"></p>
-        <p th:text="'Содержимое: ' + ${note.description}"></p>
+        <p>Содержимое: </p>
+        <p th:text="${note.description}"></p>
+        <p>Группа: </p>
+        <p th:text="${note.group.name}"></p>
       </a>
     </div>
 

@@ -139,6 +139,9 @@
             element.focus()
         }
 
+        function copyRef() {
+            let el = document.getElementById("share_field")
+        }
     </script>
 
     <title>Notes</title>
@@ -190,18 +193,46 @@
 
 <!-- Поделиться заметкой -->
 <div class="modal fade" id="share_note_id" tabindex="-1" aria-labelledby="shareNoteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" th:if="${noteIsSelected}">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-red" id="shareNoteLabel">Удаление группы</h5>
+                <h5 class="modal-title text-color-ref" id="shareNoteLabel">Поделиться заметкой</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p></p>
+                <h6>Ссылка доступа</h6>
+                <div class="row">
+                    <div class="col back-color-md text-color-light" id="share_field" th:text="${home + '/share/' + shareRef}" style="overflow: auto"></div>
+                    <div class="col-4">
+                        <button th:if="${shared}" class="btn btn-primary" onclick="copyRef()">
+                            Скопировать
+                        </button>
+                        <button th:unless="${shared}" class="btn btn-primary" onclick="copyRef()" disabled>
+                            Скопировать
+                        </button>
+                    </div>
+                </div>
+                <hr/>
+                <div th:unless="${lockShare}">
+                    <h6>Сгенерировать реферальную ссылку</h6>
+
+                    <p th:if="${lockEdit}"><input type="checkbox" id="write_access" disabled/><label class="left-offset" for="write_access">Разрешить редактировать</label></p>
+                    <p th:unless="${lockEdit}"><input type="checkbox" id="write_access"/><label class="left-offset" for="write_access">Разрешить редактировать</label></p>
+                    <p th:if="${lockDelete}"><input type="checkbox" id="delete_access" disabled/><label class="left-offset" for="delete_access">Разрешить удалить заметку</label></p>
+                    <p th:unless="${lockDelete}"><input type="checkbox" id="delete_access"/><label class="left-offset" for="delete_access">Разрешить удалить заметку</label></p>
+                    <p><input type="checkbox" id="share_access"/><label class="left-offset" for="share_access">Разрешить создавать новые ссылки</label></p>
+
+                    <div class="fill-row text-center">
+                        <button th:if="${isOwner && shared}" class="btn btn-danger" onclick="removeRefs()">Удалить все ссылки</button>
+                        <button th:unless="${isOwner && shared}" class="btn btn-danger" onclick="removeRefs()" disabled>Удалить все ссылки</button>
+                        <button class="btn btn-primary" onclick="genRefs()">Сгенерировать ссылку</button>
+                    </div>
+                </div>
+
             </div>
-            <div class="modal-footer text-center">
+            <div class="modal-footer text-center d-block">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
             </div>
         </div>
@@ -257,7 +288,7 @@
             <div class="btn-group fill-block">
                 <button type="button" class="btn userblock back-color-no text-color-light">
                     <h3 class="d-inline" th:text="${user.username}"></h3>
-                    <img th:src="@{'/uploads/'+${user.username}+'.png'}" class="img-thumbnail"/>
+<!--                    <img th:src="@{'/uploads/'+${user.username}+'.png'}" class="img-thumbnail"/>-->
                 </button>
 
                 <button type="button" class="btn back-color-no dropdown-toggle dropdown-toggle-split"

@@ -14,16 +14,15 @@ public class Access {
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Note note;
+    private NoteAccessReference accessReference;
 
-    private int rights;
 
     public Access() {
     }
 
-    public Access(User user, Note note) {
+    public Access(User user, NoteAccessReference reference) {
         this.user = user;
-        this.note = note;
+        this.accessReference = reference;
     }
 
 
@@ -35,27 +34,6 @@ public class Access {
         this.id = id;
     }
 
-    public int getRights() {
-        return rights;
-    }
-
-    public void setRights(int rights) {
-        this.rights = rights;
-    }
-
-    public void onRight(Integer flag) {
-        this.rights |= flag;
-    }
-    public void offRight(Integer flag) {
-        this.rights &= ~flag;
-    }
-    public boolean testRight(Integer flag) {
-        return (this.rights & flag) != 0;
-    }
-    public boolean testRight(AccessRights flag) {
-        return testRight(flag.flag());
-    }
-
     public User getUser() {
         return user;
     }
@@ -64,11 +42,11 @@ public class Access {
         this.user = user;
     }
 
-    public Note getNote() {
-        return note;
+    public NoteAccessReference getAccessReference() {
+        return accessReference;
     }
 
-    public void setNote(Note note) {
-        this.note = note;
+    public void setAccessReference(NoteAccessReference accessReference) {
+        this.accessReference = accessReference;
     }
 }

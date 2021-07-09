@@ -147,7 +147,13 @@ hr {
     outline-color: #0dcaf0;
     color:#0dcaf0;
 }
+.left-offset {
+    margin-left: 1rem;
+}
 
+.dropdown-menu button svg {
+    margin-right: 1rem;
+}
 .input-field-main {
     width: 96%;
     height: 81vh;

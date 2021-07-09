@@ -89,7 +89,7 @@
             <div class="btn-group fill-block">
                 <button type="button" class="btn userblock back-color-no text-color-light">
                     <h3 class="d-inline" th:text="${user.username}"></h3>
-                    <img th:src="@{'/uploads/'+${user.username}+'.png'}" class="img-thumbnail"/>
+<!--                    <img th:src="@{'/uploads/'+${user.username}+'.png'}" class="img-thumbnail"/>-->
                 </button>
 
                 <button type="button" class="btn back-color-no dropdown-toggle dropdown-toggle-split"
@@ -116,20 +116,20 @@
     <hr/>
 
     <div class="container" id="main-element">
-        <h2>Профиль</h2>
+        <h1>Профиль</h1>
         <div class="fill-row">
-            <img th:src="'/uploads/'+${user.username}+'.png'" class="d-inline img-thumbnail"/>
-            <p th:text="${user.username}"></p>
+<!--            <img th:src="'/uploads/'+${user.username}+'.png'" class="d-inline img-thumbnail"/>-->
+            <h2 th:text="'Имя пользователя: ' + ${user.username}"></h2>
 
             <p></p>
-            <h3>Смена аватара:</h3>
-            <form method="get" th:action="@{/profile/new_img}">  enctype="multipart/form-data"
-                <input type="file" />
-                <input type="submit" class="btn btn-outline-info" value="Сменить"/>
-            </form>
+<!--            <h3>Смена аватара:</h3>-->
+<!--            <form method="get" th:action="@{/profile/new_img}">  enctype="multipart/form-data"-->
+<!--                <input type="file" />-->
+<!--                <input type="submit" class="btn btn-outline-info" value="Сменить"/>-->
+<!--            </form>-->
         </div>
 
-        <hr class="p-5"/>
+        <hr class="m-5"/>
         <div id="pass_input">
         <h2 class="font-red">Опасная зона</h2>
         <h3 class="d-inline">Введите пароль: </h3> <input class="d-inline" id="password" type="password"/>

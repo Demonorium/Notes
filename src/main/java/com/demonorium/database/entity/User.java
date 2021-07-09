@@ -27,6 +27,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<Access> accesses = new HashSet<>(32);
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Set<NoteAccessReference> refs = new HashSet<>(32);
+
     protected User() {}
 
     public User(String username, String email, String password) {
@@ -41,6 +45,14 @@ public class User {
 
     public void setAccesses(Set<Access> accesses) {
         this.accesses = accesses;
+    }
+
+    public Set<NoteAccessReference> getRefs() {
+        return refs;
+    }
+
+    public void setRefs(Set<NoteAccessReference> refs) {
+        this.refs = refs;
     }
 
     public String getUsername() {

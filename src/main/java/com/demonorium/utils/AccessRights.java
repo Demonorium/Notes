@@ -1,7 +1,6 @@
 package com.demonorium.utils;
 
 public enum AccessRights {
-    BASIC,
     WRITE,
     REMOVE,
     SHARE;

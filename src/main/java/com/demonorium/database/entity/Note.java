@@ -20,7 +20,6 @@ public class Note{
     private String content;
 
     private String description;
-    private String sharecode = null;
 
     private Date creationDate;
     private Date updateDate;
@@ -31,7 +30,9 @@ public class Note{
 
     @JsonIgnore
     @OneToMany(mappedBy = "note", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private Set<Access> accesses = new HashSet<>(32);
+    private Set<NoteAccessReference> accesses = new HashSet<>(32);
+
+
     protected Note() {}
 
     public Note(String name, String content, Group group) {
@@ -47,11 +48,11 @@ public class Note{
         this.group = group;
     }
 
-    public Set<Access> getAccesses() {
+    public Set<NoteAccessReference> getAccesses() {
         return accesses;
     }
 
-    public void setAccesses(Set<Access> accesses) {
+    public void setAccesses(Set<NoteAccessReference> accesses) {
         this.accesses = accesses;
     }
 
@@ -129,13 +130,5 @@ public class Note{
                 ",\n\t updateDate=" + updateDate +
                 ",\n\t group=" + group +
                 "\n}";
-    }
-
-    public String getSharecode() {
-        return sharecode;
-    }
-
-    public void setSharecode(String sharecode) {
-        this.sharecode = sharecode;
     }
 }
