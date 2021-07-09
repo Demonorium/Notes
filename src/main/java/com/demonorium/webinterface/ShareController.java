@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.HandlerMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +21,11 @@ public class ShareController {
     @Autowired
     StorageController storage;
 
-    @GetMapping("/share/{code}")
-    String share(@PathVariable("code") String shr, Principal principal, Model model) {
+    @GetMapping("/share/**")
+    String share(HttpServletRequest request, Principal principal, Model model) {
+        String full = (String)request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+        String shr = full.substring(full.indexOf("/share/") + "/share/".length());
+
         Optional<NoteAccessReference> reference = storage.refs.findById(shr);
 
         if (!reference.isPresent())

@@ -49,7 +49,7 @@ public class StorageController {
     private static String rndInsert(String str, String ... ins) {
         Random random = new Random(new Date().getTime());
         for (String in : ins) {
-            int pos = ((int) random.nextLong()) % str.length();
+            int pos = (Math.abs((int) random.nextLong())) % str.length() - 1;
 
             str = str.substring(0, pos) + in + str.substring(pos);
         }

@@ -195,6 +195,33 @@ public class ApiController {
         return ResponseEntity.badRequest().body("/home");
     }
 
+    @GetMapping("/request/hide_note")
+    public ResponseEntity<SimpleViewAdapter<String>> hideNote(@RequestParam("id") Long id, Principal principal) {
+        User user = storage.user.getByUsername(principal.getName());
+        Optional<Note> note = storage.note.findById(id);
+        if (note.isPresent()) {
+            if (note.get().getGroup().getUser() == user) {
+                storage.refs.deleteAll(storage.refs.getByNote(note.get()));
+                return ResponseEntity.ok(new SimpleViewAdapter<>(id.toString()));
+            }
+        }
+        return ResponseEntity.badRequest().body(new SimpleViewAdapter<>("No access"));
+    }
+
+    @GetMapping("/request/deref_note")
+    public ResponseEntity<SimpleViewAdapter<String>> derefNote(@RequestParam("id") Long id, Principal principal) {
+        User user = storage.user.getByUsername(principal.getName());
+        Optional<Note> note = storage.note.findById(id);
+        if (note.isPresent()) {
+            NoteAccessReference reference = storage.refs.getByUserAndNote(user, note.get());
+            if (reference != null) {
+                String token = reference.getReference();
+                storage.refs.delete(reference);
+                return ResponseEntity.badRequest().body(new SimpleViewAdapter<>(token));
+            }
+        }
+        return ResponseEntity.badRequest().body(new SimpleViewAdapter<>("No access"));
+    }
     @GetMapping("/request/share_note")
     public ResponseEntity<SimpleViewAdapter<String>> shareNote(
             @RequestParam("id")     Long id,
@@ -210,7 +237,7 @@ public class ApiController {
                     |   (remove? AccessRights.REMOVE.flag() : 0)
                     |   (share? AccessRights.SHARE.flag() : 0);
             if (access(user, note, 0, AccessRights.SHARE.flag() | rights)) {
-                NoteAccessReference reference = storage.refs.getByUser(user);
+                NoteAccessReference reference = storage.refs.getByUserAndNote(user, note.get());
                 if (reference != null)
                     storage.refs.delete(reference);
 

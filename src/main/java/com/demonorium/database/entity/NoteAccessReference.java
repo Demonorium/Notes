@@ -71,6 +71,7 @@ public class NoteAccessReference {
         this.reference = reference;
         this.note = note;
         this.rights = rights;
+        this.user = user;
     }
 
     public Note getNote() {

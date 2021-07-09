@@ -4,6 +4,7 @@ import com.demonorium.database.entity.*;
 import com.demonorium.utils.AccessRights;
 import com.demonorium.utils.GroupFlags;
 import com.demonorium.database.StorageController;
+import com.demonorium.webinterface.view.LockView;
 import com.demonorium.webinterface.view.NoteView;
 import com.demonorium.webinterface.view.SearchView;
 import com.demonorium.webinterface.view.SimpleViewAdapter;
@@ -92,6 +93,11 @@ public class MainPageController {
         model.addAttribute("noteIsSelected", false);
         model.addAttribute("selectedNote", -1);
 
+        LockView lock = new LockView();
+        model.addAttribute("lockEdit",     true);
+        model.addAttribute("lockDelete",   true);
+        model.addAttribute("lockShare",    true);
+
         Note note = null;
         if (noteId != null) {
             Optional<Note> selected = storage.note.findById(noteId);
@@ -100,9 +106,9 @@ public class MainPageController {
                     note = selected.get();
                     model.addAttribute("noteIsSelected", true);
                     model.addAttribute("selectedNote", noteId);
-                    model.addAttribute("lockEdit",     false);
-                    model.addAttribute("lockDelete",   false);
-                    model.addAttribute("lockShare",    false);
+                    lock.setLockEdit(false);
+                    lock.setLockDelete(false);
+                    lock.setLockShare(false);
 
                     model.addAttribute("note", new NoteView(selected.get().getName(), selected.get().getContent()));
                     model.addAttribute("isOwner", true);
@@ -118,12 +124,12 @@ public class MainPageController {
                             lockDelete &= !access.getAccessReference().testRight(AccessRights.REMOVE);
                             lockShare &= !access.getAccessReference().testRight(AccessRights.SHARE);
                         }
+                        lock.setLockEdit(lockEdit);
+                        lock.setLockDelete(lockDelete);
+                        lock.setLockShare(lockShare);
 
                         model.addAttribute("noteIsSelected", true);
                         model.addAttribute("selectedNote", noteId);
-                        model.addAttribute("lockEdit",     lockEdit);
-                        model.addAttribute("lockDelete",   lockDelete);
-                        model.addAttribute("lockShare",    lockShare);
                         model.addAttribute("note", new NoteView(selected.get().getName(), selected.get().getContent()));
                     }
                     model.addAttribute("isOwner", false);
@@ -134,23 +140,18 @@ public class MainPageController {
             model.addAttribute("home", url.substring(0, url.indexOf("/home")));
         }
 
-
+        model.addAttribute("shareRef", "");
+        model.addAttribute("shared", false);
         if (note != null) {
-            NoteAccessReference reference = storage.refs.getByUser(user);
+            NoteAccessReference reference = storage.refs.getByUserAndNote(user, note);
             if (reference != null) {
                 model.addAttribute("shareRef", reference.getReference());
                 model.addAttribute("shared", true);
-            } else {
-                model.addAttribute("shareRef", "");
-                model.addAttribute("shared", false);
             }
-        } else {
-            model.addAttribute("shareRef", "");
-            model.addAttribute("shared", false);
         }
 
 
-
+        model.addAttribute("lock", lock);
         model.addAttribute("search", new SearchView());
         return "home";
     }
