@@ -6,11 +6,14 @@ import com.demonorium.database.entity.Group;
 import com.demonorium.database.entity.Note;
 import com.demonorium.database.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @Component
 public class AppUserDetailsService implements UserDetailsService {
@@ -19,6 +22,9 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    MessageSource messageSource;
 
     public UserDetails loadUserByUsername(String username) {
         User user = storage.user.getByUsername(username);
@@ -38,9 +44,9 @@ public class AppUserDetailsService implements UserDetailsService {
         if (user == null) {
             user = new User(username, email, bCryptPasswordEncoder.encode(password));
             storage.user.save(user);
-            Group group = new Group("Группа заметок", user);
+            Group group = new Group(messageSource.getMessage("hello_group",null, Locale.getDefault()), user);
             storage.group.save(group);
-            Group available = new Group("Доступные мне", user);
+            Group available = new Group(messageSource.getMessage("for_me", null, Locale.getDefault()), user);
             available.onFlag(
                     GroupFlags.DEFAULT.flag()
                     | GroupFlags.NO_RENAME.flag()
@@ -51,12 +57,9 @@ public class AppUserDetailsService implements UserDetailsService {
             storage.group.save(available);
 
             storage.note.save(new Note(
-                    "Добро пожаловать",
-                    "Это заметка, вы можете её редактировать. Используя меню справа вы можете создавать заметки и группы заметок." +
-                            " Заметки, которые были получены с помощью реферальных ссылок, попадают в группу \"Доступные мне\"." +
-                            " Заметки сохраняются автоматически. Вы можете удалять заметки и делиться ими, используя меню справа от названия." +
-                            " Используя меню справа от текущей группы вы можете управлять этой группой. Двойной клик по названию текущей группы запустит" +
-                            " переименование.", group));
+                    messageSource.getMessage("hello_head",null, Locale.getDefault()),
+                    messageSource.getMessage("hello_msg",null, Locale.getDefault()),
+                    group));
             return true;
         }
         return false;
