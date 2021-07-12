@@ -16,7 +16,6 @@ public class Access {
     @ManyToOne(fetch = FetchType.EAGER)
     private NoteAccessReference accessReference;
 
-
     public Access() {
     }
 

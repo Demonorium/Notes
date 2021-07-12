@@ -43,7 +43,8 @@
         <div class="text-center fill-row back-color-light" th:text="${note.name}">
         </div>
         <p class="logic-offset"></p>
-        <div class="text-center fill-row back-color-light" th:text="${note.content}">
+        <div class="text-center fill-row back-color-light">
+            <p th:each="tx: ${note.content}" th:text="${tx}"></p>
         </div>
     </div>
 </div>

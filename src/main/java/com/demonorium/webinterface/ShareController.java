@@ -3,6 +3,7 @@ package com.demonorium.webinterface;
 import com.demonorium.database.StorageController;
 import com.demonorium.database.entity.*;
 import com.demonorium.webinterface.view.NoteView;
+import com.demonorium.webinterface.view.ShareNoteView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +34,7 @@ public class ShareController {
 
         Note note = reference.get().getNote();
         if (principal == null) {
-            model.addAttribute("note", new NoteView(note.getName(), note.getContent()));
+            model.addAttribute("note", new ShareNoteView(note.getName(), note.getContent()));
             return "share-promo";
         } else {
             User user = storage.user.getByUsername(principal.getName());
