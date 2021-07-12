@@ -185,7 +185,12 @@ hr {
     border-left: 4px solid #0dcaf0;
     padding: 0;
 }
-
+.header {
+    padding-right: 15px!important;
+}
+.group-btn {
+    min-height: 3rem;
+}
 .align-top {
     vertical-align: top;
 }

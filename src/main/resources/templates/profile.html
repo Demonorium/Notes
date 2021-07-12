@@ -17,7 +17,7 @@
                 element = document.createElement("p")
                 element.setAttribute("class", id)
                 element.textContent = text
-                element.setAttribute("id", "pass-error")
+                element.setAttribute("id", id)
                 document.getElementById(place).appendChild(element)
             }
         }
@@ -26,7 +26,7 @@
             let pass = document.getElementById("password")
             let n_pass1 = document.getElementById("ch-password")
             let n_pass2 = document.getElementById("ch-password-2")
-            if (n_pass1.value === n_pass2.value) {
+            if ((n_pass1.value === n_pass2.value) && (n_pass1.value !== "")) {
                 axios.get("/profile/change_password", {
                     withCredentials: true,
                     params: {

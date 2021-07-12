@@ -291,8 +291,6 @@
 </div>
 
 <!-- Поделиться заметкой -->
-
-
 <div class="modal fade" id="share_note_id" tabindex="-1" aria-labelledby="shareNoteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" th:if="${noteIsSelected}">
         <div class="modal-content">
@@ -345,7 +343,7 @@
 </div>
 
 <div class="container-fluid p-0 m-0">
-    <header class="row p-0 m-0">
+    <header class="row p-0 m-0 header">
         <div class="col-1 p-0 text-right">
             <a th:href="@{/}">
                 <svg xmlns="http://www.w3.org/2000/svg" height="4.5rem" fill="currentColor" class="bi bi-sticky text-color-light p-3" viewBox="0 0 16 16">
@@ -448,7 +446,7 @@
                             <div class="fill-row" th:each="group: ${groups}">
                                 <div th:id="${group.id} + 'g'">
                                     <hr class="p-0 m-0"/>
-                                    <button th:class= "'btn fill-row p-0 m-0' + (${group.id eq selectedGroup}?'back-color-md')"
+                                    <button th:class= "'btn group-btn fill-row p-0 m-0' + (${group.id eq selectedGroup}?'back-color-md')"
                                             th:onclick="${group.id != selectedGroup}?('location.replace(\'/home/'+${group.id} + '/-1\')')">
                                         <table class="btn-table">
                                             <tr>
@@ -499,7 +497,7 @@
                                             </tr>
                                         </table>
                                     </button>
-<!--                                    <hr class="p-0 m-0"/>-->
+                                    <hr class="p-0 m-0" th:if="${group.id eq selectedGroup}"/>
                                 </div>
 
                                 <div class = "notes" th:if="${group.id eq selectedGroup}">
